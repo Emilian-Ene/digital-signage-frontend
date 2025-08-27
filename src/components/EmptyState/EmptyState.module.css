@@ -17,40 +17,44 @@
   margin-bottom: 40px;
 }
 
+/* --- THE CHANGE IS HERE --- */
 .cardGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 40px; /* Increased gap between cards */
+  display: flex; /* Changed from 'grid' */
+  gap: 40px;
   width: 100%;
-  max-width: 1100px; /* Increased max-width for a wider layout */
+  max-width: 1100px;
+  /* grid-template-columns has been removed */
 }
+/* --- END OF CHANGE --- */
+
 
 .card {
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 12px; /* Slightly larger border radius */
-  padding: 40px; /* Increased padding */
+  border-radius: 12px;
+  padding: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  flex: 1; /* ADD THIS: This makes each card take up an equal amount of space */
 }
 
 .icon {
-  font-size: 3.5rem; /* Increased icon size */
+  font-size: 3.5rem;
   color: #007bff;
-  margin-bottom: 25px; /* Adjusted margin */
+  margin-bottom: 25px;
 }
 
 .cardTitle {
-  font-size: 1.25rem; /* Increased title size */
+  font-size: 1.25rem;
   font-weight: 600;
   color: #2d3748;
-  margin-bottom: 10px; /* Adjusted margin */
+  margin-bottom: 10px;
 }
 
 .cardSubtitle {
-  font-size: 1rem; /* Increased subtitle size */
+  font-size: 1rem;
   color: #718096;
 }

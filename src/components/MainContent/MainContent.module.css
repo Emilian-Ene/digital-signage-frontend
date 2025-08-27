@@ -26,7 +26,7 @@
   gap: 15px;
 }
 
-/* --- MISSING STYLES ARE HERE --- */
+/* --- Button Styles --- */
 .btnPrimary, .btnLight {
   padding: 10px 20px;
   font-size: 14px;
@@ -38,7 +38,7 @@
 }
 
 .btnPrimary {
-  background-color: #28a745; /* Primary green */
+  background-color: #28a745;
   color: white;
 }
 .btnPrimary:hover {
@@ -47,40 +47,37 @@
 
 .btnLight {
   background-color: #fff;
-  color: #2d3748; /* Dark text */
-  border: 1px solid #e2e8f0; /* Border color */
+  color: #2d3748;
+  border: 1px solid #e2e8f0;
 }
 .btnLight:hover {
   background-color: #f8f9fa;
 }
-/* --- END OF MISSING STYLES --- */
 
-
+/* --- THIS IS THE KEY FIX --- */
 .contentBody {
   flex-grow: 1;
   display: flex;
-  flex-wrap: wrap;
-  gap: 25px;
+  flex-direction: column; /* This ensures children stack vertically and can take full width */
+  gap: 15px; /* We can set the gap between list items here */
 }
+/* --- END OF FIX --- */
 
-.playerCardGrid {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    width: 100%;
-    margin-top: 20px;
+.playerCardGrid, .playlistList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Gap between rows */
+  width: 100%;
 }
 
 .loadingMessage, .errorMessage, .emptyPageMessage {
   width: 100%;
   padding: 20px;
   color: #718096;
-
-  /* --- NEW STYLES FOR CENTERING --- */
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-grow: 1; /* Make it take up all available vertical space */
+  flex-grow: 1;
   text-align: center;
 }
 
@@ -89,7 +86,6 @@
     background-color: #ffe0e0;
     border: 1px solid #e53e3e;
     border-radius: 8px;
-    margin-top: 20px;
 }
 
 .spacer {
@@ -127,12 +123,4 @@
   font-size: 1.2rem;
   font-weight: bold;
   text-decoration: none;
-}
-
-/* Container for the list of playlists */
-.playlistList {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-top: 20px;
 }

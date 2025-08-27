@@ -2,11 +2,12 @@
 
 import React, { useState } from 'react';
 import styles from './MainContent.module.css';
-import PlayerCard from '../PlayerCard';
+import PlayerCard from '../PlayerCard/PlayerCard';
 import PairingModal from '../PairingModal/PairingModal';
 import DeleteConfirmModal from '../DeleteConfirmModal/DeleteConfirmModal';
 import EmptyState from '../EmptyState/EmptyState';
 import PlaylistRow from '../PlaylistRow/PlaylistRow';
+import CreatePlaylistModal from '../CreatePlaylistModal/CreatePlaylistModal';
 
 const MainContent = ({
   activePage, screens, playlists, isLoading, error, onActionComplete,
@@ -14,6 +15,7 @@ const MainContent = ({
 }) => {
 
   const [isPairingModalOpen, setPairingModalOpen] = useState(false);
+  const [isCreatePlaylistModalOpen, setCreatePlaylistModalOpen] = useState(false);
 
   const handleClosePairingModal = (didPair) => {
     setPairingModalOpen(false);
@@ -25,6 +27,7 @@ const MainContent = ({
   const renderHeaderActions = () => {
     switch (activePage) {
       case 'Home':
+        // --- THIS IS THE CORRECTED CODE ---
         return (
           <>
             <button onClick={() => setPairingModalOpen(true)} className={styles.btnPrimary}>+ New screen</button>
@@ -35,7 +38,7 @@ const MainContent = ({
       case 'Playlists':
         return (
           <div className={styles.playlistHeaderActions}>
-            <button className={styles.btnCreate}>+ Create</button>
+            <button onClick={() => setCreatePlaylistModalOpen(true)} className={styles.btnCreate}>+ Create</button>
             <a href="#" className={styles.helpLink}>?</a>
           </div>
         );
@@ -71,24 +74,17 @@ const MainContent = ({
       <header className={styles.mainHeader}>
         {activePage !== 'Home' && <h2 className={styles.pageTitle}>{activePage}</h2>}
         {activePage === 'Home' && <div className={styles.spacer}></div>}
-        {/* --- BUG FIX: Corrected the function name casing --- */}
         <div className={styles.headerActions}>{renderHeaderActions()}</div>
       </header>
-
       <div className={styles.contentBody}>
         {renderContent()}
       </div>
-
-      <PairingModal 
-        isOpen={isPairingModalOpen} 
-        onRequestClose={handleClosePairingModal}
-      />
-      
-      <DeleteConfirmModal 
-        isOpen={isDeleteModalOpen}
-        onClose={() => setDeleteModalOpen(false)}
-        onConfirm={handlePerformDelete}
-        screenName={screenToDelete?.name}
+      <PairingModal isOpen={isPairingModalOpen} onRequestClose={handleClosePairingModal} />
+      <DeleteConfirmModal isOpen={isDeleteModalOpen} onClose={() => setDeleteModalOpen(false)} onConfirm={handlePerformDelete} screenName={screenToDelete?.name} />
+      <CreatePlaylistModal
+        isOpen={isCreatePlaylistModalOpen}
+        onClose={() => setCreatePlaylistModalOpen(false)}
+        onPlaylistCreated={onActionComplete}
       />
     </main>
   );

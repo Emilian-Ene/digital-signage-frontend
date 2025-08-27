@@ -1,7 +1,8 @@
 // src/components/PairingModal/PairingModal.jsx
 
+
 import React, { useState, useRef, useEffect } from 'react';
-import Modal from '../Modal/Modal'; // Use our custom modal
+import Modal from '../Modal/Modal';
 import styles from './PairingModal.module.css';
 import DeviceCard from '../DeviceCard/DeviceCard';
 import InstructionsModal from '../InstructionsModal/InstructionsModal';

@@ -1,0 +1,125 @@
+/* src/components/CreatePlaylistModal/CreatePlaylistModal.module.css */
+
+.modal {
+  background-color: #ffffff;
+  padding: 35px; /* Increased padding */
+  border-radius: 12px; /* Softer corners for a larger box */
+  width: 100%;
+  max-width: 800px; /* --- Significantly increased width --- */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 30px; /* Increased gap */
+}
+
+.inputGroup {
+  position: relative;
+}
+
+.inputField {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 8px; /* Slightly larger radius */
+  padding: 16px; /* Increased padding */
+  font-size: 1.1rem; /* Larger font */
+  color: #111827;
+  outline: none;
+  transition: border-color 0.2s;
+  background-color: #fff;
+}
+
+.inputField:focus {
+  border-color: #007bff;
+}
+
+.inputLabel {
+  position: absolute;
+  top: 17px; /* Adjusted for new padding */
+  left: 16px;
+  color: #6b7280;
+  pointer-events: none;
+  transition: all 0.2s ease-out;
+}
+
+.inputField:focus + .inputLabel,
+.inputField:not(:placeholder-shown) + .inputLabel {
+  top: -10px;
+  left: 12px;
+  font-size: 0.8rem;
+  background-color: #fff;
+  padding: 0 4px;
+  color: #007bff;
+}
+
+.inputLabelStatic {
+  font-size: 0.9rem; /* Larger label */
+  color: #009688;
+  margin-bottom: 6px;
+}
+
+.selectWrapper {
+  position: relative;
+}
+
+.selectField {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 16px 16px 16px 45px; /* Adjusted padding */
+  font-size: 1.1rem; /* Larger font */
+  color: #111827;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.selectField:focus {
+  outline: none;
+  border-color: #009688;
+}
+
+.selectIcon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280;
+  font-size: 1.4rem; /* Larger icon */
+  pointer-events: none;
+}
+
+.selectWrapper::after {
+  content: '▼';
+  font-size: 0.7rem;
+  color: #6b7280;
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.createBtn {
+  background-color: #f3f4f6;
+  color: #9ca3af;
+  padding: 16px; /* Increased padding */
+  font-size: 1.1rem; /* Larger font */
+  font-weight: 500;
+  border: none;
+  border-radius: 25px; /* Rounder shape */
+  cursor: not-allowed;
+  transition: all 0.2s;
+  margin-top: 10px; /* Add some space above the button */
+}
+
+.createBtn:not(:disabled) {
+  background-color: #e0e0e0;
+  color: #333;
+  cursor: pointer;
+}
+
+.createBtn:not(:disabled):hover {
+  background-color: #c7c7c7;
+}

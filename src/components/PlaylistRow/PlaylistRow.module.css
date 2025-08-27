@@ -1,26 +1,94 @@
 /* src/components/PlaylistRow/PlaylistRow.module.css */
+
 .playlistRow {
-  background-color: #fff;
+  background-color: #ffffff;
+  border: 1px solid #eef2f7;
+  border-radius: 12px;
+  padding: 15px 25px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  cursor: pointer;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.playlistRow:hover {
+  border-color: #d1d9e4;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.thumbnail {
+  width: 60px;
+  height: 60px;
+  background-color: #f7fafc;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
-  padding: 15px 20px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: #a0aec0;
+}
+
+/* --- THIS IS THE KEY FIX --- */
+.details {
   display: flex;
   align-items: center;
   gap: 20px;
 }
-.icon {
-  font-size: 1.5rem;
-  color: #a0aec0;
-}
+/* --- END OF FIX --- */
+
 .name {
-  flex-grow: 1;
   font-weight: 500;
+  font-size: 1rem;
   color: #2d3748;
 }
+
+.duration {
+  color: #718096;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.orientationTag {
+  background-color: #eef2f7;
+  color: #4a5568;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.orientationTag svg {
+  font-size: 1rem;
+}
+
+.spacer {
+  flex-grow: 1; /* Pushes the actions to the far right */
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
 .actionBtn {
   background: none;
   border: none;
   cursor: pointer;
   color: #a0aec0;
   font-size: 1.2rem;
+  padding: 5px;
+  transition: color 0.2s;
+}
+
+.actionBtn:hover {
+  color: #2d3748;
 }
