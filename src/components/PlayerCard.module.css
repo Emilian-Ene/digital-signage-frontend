@@ -1,0 +1,101 @@
+/* src/components/PlayerCard/PlayerCard.module.css */
+
+.playerCard {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px; /* Softer corners */
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.playerCard:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.playerThumbnail {
+    width: 60px;
+    height: 60px;
+    background-color: #f7fafc; /* Very light grey */
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: #a0aec0; /* Lighter icon color */
+}
+
+.playerDetails {
+    flex-grow: 1; /* Pushes actions to the far right */
+    display: flex;
+    flex-direction: column; /* Stack name and status vertically */
+    gap: 8px; /* Space between name and status */
+    min-width: 0;
+}
+
+.playerName {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #2d3748;
+    margin: 0; /* Remove default margin */
+}
+
+.playerTags {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.playerStatusDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.statusTag {
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: capitalize;
+    padding: 4px 10px;
+    border-radius: 16px; /* Pill shape */
+}
+
+/* * Status-specific colors  */
+.playerCard.online .playerStatusDot { background-color: #28a745; }
+.playerCard.online .statusTag {
+    color: #28a745;
+    background-color: rgba(40, 167, 69, 0.1);
+}
+
+.playerCard.offline .playerStatusDot { background-color: #dc3545; }
+.playerCard.offline .statusTag {
+    color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+
+/* We can remove the .unpaired styles as they are no longer shown on this page */
+
+
+.playerActions {
+    display: flex;
+    gap: 15px;
+}
+
+.iconBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #a0aec0;
+    transition: color 0.2s;
+}
+
+.iconBtn:hover {
+    color: #2d3748;
+}

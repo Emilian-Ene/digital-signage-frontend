@@ -1,0 +1,100 @@
+/* src/components/MainContent/MainContent.module.css */
+
+.mainContent {
+  flex-grow: 1;
+  padding: 30px 40px;
+  overflow-y: auto; /* Allow scrolling for main content */
+}
+
+/* src/components/MainContent/MainContent.module.css */
+
+.mainContent {
+  flex-grow: 1;
+  padding: 30px 40px;
+  overflow-y: auto;
+  display: flex; /* ADD THIS */
+  flex-direction: column; /* ADD THIS */
+}
+
+.contentBody {
+  flex-grow: 1; /* ADD THIS */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+}
+
+.pageTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.headerActions {
+  display: flex;
+  gap: 15px;
+}
+
+/* Button Styles (These should probably be global, but for CSS Modules, they're here for now) */
+.btnPrimary, .btnLight {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnPrimary {
+  background-color: #28a745; /* Primary green */
+  color: white;
+}
+.btnPrimary:hover {
+  background-color: #218838;
+}
+
+.btnLight {
+  background-color: #fff;
+  color: #2d3748; /* Dark text */
+  border: 1px solid #e2e8f0; /* Border color */
+}
+.btnLight:hover {
+  background-color: #f8f9fa;
+}
+
+
+/* Player Card Grid */
+.contentBody {
+  /* This ensures the grid wraps correctly */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+}
+
+/* src/components/MainContent/MainContent.module.css */
+
+.playerCardGrid {
+    display: flex;
+    flex-direction: column; /* Stack cards vertically */
+    gap: 15px; /* Space between each card */
+    width: 100%;
+    margin-top: 20px
+}
+
+.loadingMessage, .errorMessage, .emptyPageMessage {
+  text-align: center;
+  width: 100%;
+  padding: 20px;
+  color: #718096;
+}
+
+.errorMessage {
+    color: #e53e3e; /* Red for errors */
+    background-color: #ffe0e0;
+    border: 1px solid #e53e3e;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+.spacer {
+  flex-grow: 1;
+}

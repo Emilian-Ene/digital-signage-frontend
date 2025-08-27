@@ -1,0 +1,91 @@
+/* src/components/Sidebar/Sidebar.module.css */
+
+.sidebar {
+  width: 250px;
+  background-color: #1a202c; /* Dark background for sidebar */
+  color: #ffffff;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0; /* Prevent sidebar from shrinking */
+}
+
+.sidebarHeader {
+  padding: 0 25px;
+  margin-bottom: 30px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.sidebarNav {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.navLink {
+  color: #a0aec0; /* Light gray text */
+  text-decoration: none;
+  padding: 12px 25px;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-left: 3px solid transparent;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.navLink:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #fff;
+}
+
+.navLink.active {
+  background-color: rgba(0, 123, 255, 0.1); /* Light blue background */
+  color: #007bff; /* Primary blue */
+  font-weight: 500;
+  border-left-color: #007bff;
+}
+
+.sidebarFooter {
+  padding: 20px 25px;
+  border-top: 1px solid #2d3748; /* Darker border */
+}
+
+.userProfile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.userAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #4a5568; /* Grayish blue */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.userEmail {
+  font-size: 14px;
+  color: #a0aec0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.logoLink {
+  text-decoration: none;
+  color: inherit;
+}

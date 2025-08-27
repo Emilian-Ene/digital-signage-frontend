@@ -1,0 +1,18 @@
+/* src/components/Modal/Modal.module.css */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(107, 114, 128, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5000;
+}
+
+.content {
+  position: relative;
+  /* The specific modal will style itself */
+}

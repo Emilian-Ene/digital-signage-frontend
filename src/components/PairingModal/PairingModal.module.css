@@ -1,0 +1,112 @@
+/* src/components/PairingModal/PairingModal.module.css */
+
+.modal {
+  background: #212121; /* Dark background */
+  max-width: 700px;
+  width: 90%;
+  color: #e0e0e0;
+  position: relative;
+  padding: 30px;
+  border-radius: 12px;
+}
+
+.closeButton {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: #bdbdbd;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.content {
+  text-align: center;
+}
+
+.title {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.subtitle {
+  color: #bdbdbd;
+  margin-top: 10px;
+}
+
+.codeInputContainer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.codeInput {
+  width: 50px;
+  height: 60px;
+  text-align: center;
+  font-size: 2rem;
+  background-color: #2d2d2d;
+  border: 1px solid #424242;
+  color: white;
+  border-radius: 8px;
+}
+
+.pairButton {
+  background-color: #424242;
+  color: #e0e0e0;
+  border: 1px solid #5a5a5a;
+  padding: 12px 40px;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.2s;
+}
+
+.pairButton:hover {
+  background-color: #5a5a5a;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #757575;
+  margin: 40px 0;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #424242;
+}
+
+.divider:not(:empty)::before {
+  margin-right: 0.25em;
+}
+
+.divider:not(:empty)::after {
+  margin-left: 0.25em;
+}
+
+.deviceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+.nameInput {
+  padding: 10px;
+  margin-bottom: 20px;
+  width: 60%;
+  border-radius: 4px;
+  border: 1px solid #555;
+  background-color: #333;
+  color: white;
+  font-size: 1rem;
+  text-align: center;
+}
