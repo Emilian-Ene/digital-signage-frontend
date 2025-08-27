@@ -10,61 +10,85 @@ const API_BASE_URL = 'http://localhost:3000/api';
 function App() {
   const [activePage, setActivePage] = useState('Home');
   const [screens, setScreens] = useState([]);
+  const [playlists, setPlaylists] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [screenToDelete, setScreenToDelete] = useState(null);
 
-  const fetchScreens = useCallback(async (showLoading = true) => {
-    if (showLoading) setIsLoading(true);
-    setError(null);
+  const fetchScreens = useCallback(async (isInitialLoad = true) => {
+    if (isInitialLoad) {
+      setIsLoading(true);
+      setError(null);
+    }
     try {
       const response = await fetch(`${API_BASE_URL}/players`);
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      if (!response.ok) throw new Error('Failed to fetch screens');
       const allPlayers = await response.json();
-
-      // --- THE FINAL, CORRECT FIX IS HERE ---
-      // We filter based on the exact strings from your Mongoose schema.
-      const visiblePlayers = allPlayers.filter(player => 
-        player.status !== 'Pending' && player.status !== 'unpaired' // <-- Lowercase 'u'
-      );
-      
+      const visiblePlayers = allPlayers.filter(player => player.status !== 'unpaired');
       setScreens(visiblePlayers);
+      if (!isInitialLoad) setError(null);
     } catch (e) {
-      console.error('Failed to load screens:', e);
-      setError('Failed to load screens. Is the backend server running?');
+      console.error(e);
+      if (isInitialLoad) {
+        setError('Could not load screens.');
+      }
     } finally {
-      if (showLoading) setIsLoading(false);
+      if (isInitialLoad) setIsLoading(false);
     }
   }, []);
 
+  const fetchPlaylists = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`${API_BASE_URL}/playlists`);
+      if (!response.ok) throw new Error('Failed to fetch playlists');
+      const data = await response.json();
+      setPlaylists(data);
+    } catch (e) {
+      console.error(e);
+      setError('Could not load playlists.');
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  // --- THE FIX IS HERE ---
   useEffect(() => {
     if (activePage === 'Screens') {
-      fetchScreens();
+      fetchScreens(true);
       const intervalId = setInterval(() => fetchScreens(false), 5000);
       return () => clearInterval(intervalId);
+    } else if (activePage === 'Playlists') {
+      fetchPlaylists();
     }
-  }, [activePage, fetchScreens]);
+  // The dependency array is now correct. It will only re-run on page change.
+  }, [activePage]);
 
   const onActionComplete = () => {
-    fetchScreens();
+    if (activePage === 'Screens') {
+      fetchScreens(true);
+    } else if (activePage === 'Playlists') {
+      fetchPlaylists();
+    }
   };
   
   const showDeleteConfirmation = (id, name) => {
-    setScreenToDelete({ id, name });
     setDeleteModalOpen(true);
+    setScreenToDelete({ id, name });
   };
   
   const handlePerformDelete = async () => {
     if (!screenToDelete) return;
     try {
-        await fetch(`${API_BASE_URL}/players/${screenToDelete.id}`, { method: 'DELETE' });
-        setDeleteModalOpen(false);
-        setScreenToDelete(null);
-        fetchScreens();
+      await fetch(`${API_BASE_URL}/players/${screenToDelete.id}`, { method: 'DELETE' });
+      setDeleteModalOpen(false);
+      setScreenToDelete(null);
+      onActionComplete();
     } catch (error) {
-        alert(`Error: ${error.message}`);
+      alert(`Error: ${error.message}`);
     }
   };
 
@@ -77,6 +101,7 @@ function App() {
       <MainContent 
         activePage={activePage}
         screens={screens}
+        playlists={playlists}
         isLoading={isLoading}
         error={error}
         onActionComplete={onActionComplete}

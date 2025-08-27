@@ -38,7 +38,7 @@
 }
 
 .playerName {
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 500;
     color: #2d3748;
     margin: 0; /* Remove default margin */
@@ -58,7 +58,7 @@
 }
 
 .statusTag {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     font-weight: 500;
     text-transform: capitalize;
     padding: 4px 10px;
@@ -98,4 +98,22 @@
 
 .iconBtn:hover {
     color: #2d3748;
+}
+
+/* 1. Define the pulsing animation */
+@keyframes pulse-green {
+  0% {
+    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(40, 167, 69, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+  }
+}
+
+/* 2. Apply the animation to the status dot ONLY when the card is online */
+.playerCard.online .playerStatusDot {
+  animation: pulse-green 2s infinite;
 }

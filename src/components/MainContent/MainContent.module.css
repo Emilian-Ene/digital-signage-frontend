@@ -3,24 +3,16 @@
 .mainContent {
   flex-grow: 1;
   padding: 30px 40px;
-  overflow-y: auto; /* Allow scrolling for main content */
-}
-
-/* src/components/MainContent/MainContent.module.css */
-
-.mainContent {
-  flex-grow: 1;
-  padding: 30px 40px;
   overflow-y: auto;
-  display: flex; /* ADD THIS */
-  flex-direction: column; /* ADD THIS */
+  display: flex;
+  flex-direction: column;
 }
 
-.contentBody {
-  flex-grow: 1; /* ADD THIS */
+.mainHeader {
   display: flex;
-  flex-wrap: wrap;
-  gap: 25px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
 }
 
 .pageTitle {
@@ -34,7 +26,7 @@
   gap: 15px;
 }
 
-/* Button Styles (These should probably be global, but for CSS Modules, they're here for now) */
+/* --- MISSING STYLES ARE HERE --- */
 .btnPrimary, .btnLight {
   padding: 10px 20px;
   font-size: 14px;
@@ -61,40 +53,86 @@
 .btnLight:hover {
   background-color: #f8f9fa;
 }
+/* --- END OF MISSING STYLES --- */
 
 
-/* Player Card Grid */
 .contentBody {
-  /* This ensures the grid wraps correctly */
+  flex-grow: 1;
   display: flex;
   flex-wrap: wrap;
   gap: 25px;
 }
 
-/* src/components/MainContent/MainContent.module.css */
-
 .playerCardGrid {
     display: flex;
-    flex-direction: column; /* Stack cards vertically */
-    gap: 15px; /* Space between each card */
+    flex-direction: column;
+    gap: 15px;
     width: 100%;
-    margin-top: 20px
+    margin-top: 20px;
 }
 
 .loadingMessage, .errorMessage, .emptyPageMessage {
-  text-align: center;
   width: 100%;
   padding: 20px;
   color: #718096;
+
+  /* --- NEW STYLES FOR CENTERING --- */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1; /* Make it take up all available vertical space */
+  text-align: center;
 }
 
 .errorMessage {
-    color: #e53e3e; /* Red for errors */
+    color: #e53e3e;
     background-color: #ffe0e0;
     border: 1px solid #e53e3e;
     border-radius: 8px;
     margin-top: 20px;
 }
+
 .spacer {
   flex-grow: 1;
+}
+
+/* Styles for the playlist header */
+.playlistHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.btnCreate {
+  background-color: #00bfa5;
+  color: white;
+  padding: 10px 25px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btnCreate:hover {
+  background-color: #00a791;
+}
+
+.helpLink {
+  color: #00bfa5;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+/* Container for the list of playlists */
+.playlistList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
 }
