@@ -1,0 +1,12 @@
+/* src/components/Layout/Layout.module.css */
+
+.appLayout {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+
+.pageContent {
+  flex-grow: 1;
+  overflow-y: auto; /* Allow content to scroll if it's too long */
+}

@@ -1,95 +1,73 @@
 // src/components/Sidebar/Sidebar.jsx
 
-import React from "react";
-import styles from "./Sidebar.module.css";
-import {
-  FiTv,
-  FiList,
-  FiImage,
-  FiPenTool,
-  FiGrid,
-  FiCode,
-  FiBriefcase,
-  FiDollarSign,
-  FiHelpCircle,
-} from "react-icons/fi";
+import React from 'react';
+import styles from './Sidebar.module.css';
+import { Link } from 'react-router-dom';
+import { 
+  FiTv, FiList, FiImage, FiPenTool, FiGrid, FiCode,
+  FiBriefcase, FiDollarSign, FiHelpCircle 
+} from 'react-icons/fi';
 
-// --- Navigation Data (Moved here for clarity) ---
 const mainNavLinks = [
-  { icon: <FiTv />, text: "Screens" },
-  { icon: <FiList />, text: "Playlists" },
-  { icon: <FiImage />, text: "Media" },
-  { icon: <FiPenTool />, text: "Scenes" },
-  { icon: <FiGrid />, text: "Apps" },
-  { icon: <FiCode />, text: "Integrations" },
+  { icon: <FiTv />, text: 'Screens', path: '/screens' },
+  { icon: <FiList />, text: 'Playlists', path: '/playlists' },
+  { icon: <FiImage />, text: 'Media', path: '/media' },
+  { icon: <FiPenTool />, text: 'Scenes', path: '/scenes' },
+  { icon: <FiGrid />, text: 'Apps', path: '/apps' },
+  { icon: <FiCode />, text: 'Integrations', path: '/integrations' },
 ];
 
 const secondaryNavLinks = [
-  { icon: <FiBriefcase />, text: "My Organization" },
-  { icon: <FiDollarSign />, text: "Billing" },
-  { icon: <FiHelpCircle />, text: "Documentation" },
+  { icon: <FiBriefcase />, text: 'My Organization', path: '/organization' },
+  { icon: <FiDollarSign />, text: 'Billing', path: '/billing' },
+  { icon: <FiHelpCircle />, text: 'Documentation', path: '/docs' },
 ];
 
+// --- THE FIX IS HERE: Add setActivePage as a prop ---
 const Sidebar = ({ activePage, setActivePage }) => {
   return (
     <aside className={styles.sidebar}>
       <div className={styles.sidebarHeader}>
-        <a
-          href="#"
-          className={styles.logoLink}
-          onClick={(e) => {
-            e.preventDefault();
-            setActivePage("Home");
-          }}
-        >
+        {/* --- ADD onClick HERE --- */}
+        <Link to="/" className={styles.logoLink} onClick={() => setActivePage('Home')}>
           <h1 className={styles.logo}>PixelFlow</h1>
-        </a>
+        </Link>
       </div>
       <nav className={styles.sidebarNav}>
         <div>
-          {mainNavLinks.map((link) => (
-            <a
+          {mainNavLinks.map(link => (
+            <Link
               key={link.text}
-              href="#"
-              className={`${styles.navLink} ${
-                activePage === link.text ? styles.active : ""
-              }`}
-              onClick={(e) => {
-                e.preventDefault();
-                setActivePage(link.text);
-              }}
+              to={link.path}
+              className={`${styles.navLink} ${activePage === link.text ? styles.active : ''}`}
+              // --- ADD onClick HERE ---
+              onClick={() => setActivePage(link.text)}
             >
               {link.icon}
               <span>{link.text}</span>
-            </a>
+            </Link>
           ))}
         </div>
       </nav>
 
       <div className={styles.sidebarFooter}>
         <nav>
-          {secondaryNavLinks.map((link) => (
-            <a
+          {secondaryNavLinks.map(link => (
+             <Link
               key={link.text}
-              href="#"
-              className={`${styles.navLink} ${
-                activePage === link.text ? styles.active : ""
-              }`}
-              onClick={(e) => {
-                e.preventDefault();
-                setActivePage(link.text);
-              }}
+              to={link.path}
+              className={`${styles.navLink} ${activePage === link.text ? styles.active : ''}`}
+              // --- ADD onClick HERE ---
+              onClick={() => setActivePage(link.text)}
             >
               {link.icon}
               <span>{link.text}</span>
-            </a>
+            </Link>
           ))}
         </nav>
         <div className={styles.userProfile}>
           <div className={styles.userAvatar}>IE</div>
-          <span className={styles.userEmail}>
-            ionut.emilian@paragon-cc.co.uk
-          </span>
+          <span className={styles.userEmail}>ionut.emilian@paragon-cc.co.uk</span>
         </div>
       </div>
     </aside>

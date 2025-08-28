@@ -20,3 +20,61 @@ body {
 #root {
     height: 100%;
 }
+
+/* src/index.css */
+/* ... (keep your existing body, #root styles) ... */
+
+.page-container {
+  padding: 30px 40px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.list-container {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.content-centered {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Add to the bottom of src/index.css */
+
+.playlist-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.btn-create {
+  background-color: #00bfa5;
+  color: white;
+  padding: 10px 25px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-create:hover {
+  background-color: #00a791;
+}
+
+.help-link {
+  color: #00bfa5;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-decoration: none;
+}

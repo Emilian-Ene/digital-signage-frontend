@@ -1,0 +1,107 @@
+/* src/pages/ScreenDetailsPage.module.css */
+
+.detailsLayout {
+  display: flex;
+  gap: 40px;
+  margin-top: 30px;
+  align-items: flex-start;
+}
+
+.previewColumn {
+  flex: 1; /* Takes up 1 part of the space */
+  min-width: 300px;
+}
+
+.settingsColumn {
+  flex: 2; /* Takes up 2 parts of the space */
+  max-width: 700px;
+}
+
+.columnTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 20px;
+}
+
+.previewBox {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-color: #000000;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.previewInfo {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #718096;
+  padding: 10px 0;
+  border-bottom: 1px solid #e2e8f0; /* Add a subtle separator */
+}
+
+.previewInfo:last-of-type {
+  border-bottom: none;
+}
+
+.infoValue {
+  font-weight: 500;
+  color: #2d3748;
+}
+
+.formCard {
+  background-color: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 30px;
+}
+
+.formGroup {
+  margin-bottom: 25px;
+}
+
+.formGroup label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #4a5568;
+  margin-bottom: 8px;
+}
+
+.input {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background-color: #fff;
+}
+
+.input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+.saveButton {
+  background-color: #007bff;
+  color: white;
+  padding: 12px 25px;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.saveButton:hover {
+  background-color: #0056b3;
+}
+
+.saveButton:disabled {
+  background-color: #a0aec0;
+  cursor: not-allowed;
+}

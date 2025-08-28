@@ -1,0 +1,55 @@
+/* src/components/MainHeader/MainHeader.module.css */
+
+.mainHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0; /* Prevent the header from shrinking */
+}
+
+.pageTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.headerActions {
+  display: flex;
+  gap: 15px;
+}
+
+/* 
+  We must define button styles here because CSS Modules are scoped.
+  The 'actions' prop passes JSX with classNames, and this stylesheet
+  needs to know what those classNames mean.
+*/
+:global(.btn) {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+:global(.btn-primary) {
+  background-color: #28a745; /* Primary green */
+  color: white;
+}
+:global(.btn-primary:hover) {
+  background-color: #218838;
+}
+
+:global(.btn-light) {
+  background-color: #fff;
+  color: #2d3748; /* Dark text */
+  border: 1px solid #e2e8f0; /* Border color */
+}
+:global(.btn-light:hover) {
+  background-color: #f8f9fa;
+}
+
+.spacer {
+  flex-grow: 1;
+}
