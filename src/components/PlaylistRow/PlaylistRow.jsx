@@ -4,7 +4,7 @@ import React from 'react';
 import styles from './PlaylistRow.module.css';
 import { FiEdit, FiSend, FiTrash2, FiMonitor, FiSmartphone } from 'react-icons/fi';
 
-const PlaylistRow = ({ playlist }) => {
+const PlaylistRow = ({ playlist, onDeleteClick }) => {
   const getOrientationTag = (orientation) => {
     switch (orientation) {
       case 'Landscape': return { icon: <FiMonitor />, text: '16x9' };
@@ -21,22 +21,31 @@ const PlaylistRow = ({ playlist }) => {
         <FiMonitor />
       </div>
       
-      <div className={styles.details}>
-        <span className={styles.name}>{playlist.name}</span>
-        <span className={styles.duration}>00:00</span>
-        <div className={styles.orientationTag}>
-          {orientationTag.icon}
-          <span>{orientationTag.text}</span>
-        </div>
+      <span className={styles.name}>{playlist.name}</span>
+
+      {/* This spacer will push all subsequent items to the right */}
+      <div className={styles.spacer}></div> 
+      
+      <span className={styles.duration}>00:00</span>
+
+      <div className={styles.orientationTag}>
+        {orientationTag.icon}
+        <span>{orientationTag.text}</span>
       </div>
       
-      {/* Spacer div to push actions to the right */}
-      <div className={styles.spacer}></div> 
-
       <div className={styles.actions}>
         <button className={styles.actionBtn} title="Edit"><FiEdit /></button>
         <button className={styles.actionBtn} title="Publish"><FiSend /></button>
-        <button className={styles.actionBtn} title="Delete"><FiTrash2 /></button>
+        <button 
+          className={styles.actionBtn} 
+          title="Delete"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDeleteClick(playlist._id, playlist.name);
+          }}
+        >
+          <FiTrash2 />
+        </button>
       </div>
       {/* --- End of corrected structure --- */}
     </div>

@@ -6,7 +6,7 @@
   border-radius: 12px;
   padding: 15px 25px;
   display: flex;
-  align-items: center;
+  align-items: center; /* This is the key for vertical alignment */
   gap: 20px;
   width: 100%;
   cursor: pointer;
@@ -32,24 +32,22 @@
   color: #a0aec0;
 }
 
-/* --- THIS IS THE KEY FIX --- */
-.details {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-/* --- END OF FIX --- */
-
 .name {
   font-weight: 500;
   font-size: 1rem;
   color: #2d3748;
+  white-space: nowrap; /* Prevent name from wrapping */
+}
+
+.spacer {
+  flex-grow: 1; /* This pushes everything after it to the right */
 }
 
 .duration {
   color: #718096;
   font-size: 0.9rem;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .orientationTag {
@@ -63,20 +61,18 @@
   align-items: center;
   gap: 8px;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .orientationTag svg {
   font-size: 1rem;
 }
 
-.spacer {
-  flex-grow: 1; /* Pushes the actions to the far right */
-}
-
 .actions {
   display: flex;
   align-items: center;
   gap: 20px;
+  flex-shrink: 0;
 }
 
 .actionBtn {
