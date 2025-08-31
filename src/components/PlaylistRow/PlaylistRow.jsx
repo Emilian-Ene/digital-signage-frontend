@@ -17,16 +17,23 @@ const PlaylistRow = ({ playlist, onDeleteClick }) => {
   };
   const orientationTag = getOrientationTag(playlist.orientation);
   
+  // ✅ CHANGED: Added logic to get the media type
   const firstItem = playlist.items?.[0];
-  const thumbnailUrl = firstItem?.media?.fileUrl ? `${API_BASE_URL}${firstItem.media.fileUrl}` : null;
+  const firstMedia = firstItem?.media; // Safely get the media object
+  const isVideo = firstMedia?.mediaType === 'video';
+  const thumbnailUrl = firstMedia?.fileUrl ? `${API_BASE_URL}${firstMedia.fileUrl}` : null;
 
   return (
     <div className={styles.playlistRow}>
-      {/* --- THIS IS THE CORRECTED STRUCTURE --- */}
       <div className={styles.leftSection}>
         <div className={styles.thumbnail}>
+          {/* ✅ CHANGED: This now checks if the media is a video */}
           {thumbnailUrl ? (
-            <img src={thumbnailUrl} alt={playlist.name} className={styles.previewImage} />
+            isVideo ? (
+              <video src={thumbnailUrl} className={styles.previewImage} muted preload="metadata" />
+            ) : (
+              <img src={thumbnailUrl} alt={playlist.name} className={styles.previewImage} />
+            )
           ) : (
             <FiMonitor />
           )}
@@ -57,7 +64,6 @@ const PlaylistRow = ({ playlist, onDeleteClick }) => {
           </button>
         </div>
       </div>
-      {/* --- End of corrected structure --- */}
     </div>
   );
 };

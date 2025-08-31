@@ -7,25 +7,29 @@ import { Link } from 'react-router-dom';
 
 const API_BASE_URL = 'http://localhost:3000';
 
-// getDisplayStatus function is no longer needed here, it's in the parent
-const PlayerCard = ({ player, onDeleteClick, onPreviewClick }) => { // <-- Add onPreviewClick prop
+const PlayerCard = ({ player, onDeleteClick, onPreviewClick }) => {
   
-  // The player object now has a pre-calculated displayStatus
   const displayStatus = player.displayStatus || { text: 'Offline', className: 'offline' };
   
-  // Logic to find the thumbnail URL is also simplified
+  // ✅ CHANGED: Added logic to safely get the media item and its type
   const firstItem = player.assignedContent?.contentId?.items?.[0];
-  const thumbnailUrl = firstItem?.media?.fileUrl ? `${API_BASE_URL}${firstItem.media.fileUrl}` : null;
+  const firstMedia = firstItem?.media; // Safely access the media object
+  const isVideo = firstMedia?.mediaType === 'video';
+  const thumbnailUrl = firstMedia?.fileUrl ? `${API_BASE_URL}${firstMedia.fileUrl}` : null;
   const playlistName = player.assignedContent?.contentId?.name || 'None';
 
   return (
     <div className={`${styles.playerCard} ${styles[displayStatus.className]}`}>
       <div className={styles.playerInfo}>
         
-        {/* The thumbnail is now a clickable button */}
         <button onClick={onPreviewClick} className={styles.playerThumbnail}>
+          {/* ✅ CHANGED: This now checks if the media is a video */}
           {thumbnailUrl ? (
-            <img src={thumbnailUrl} alt={player.name} className={styles.previewImage} />
+            isVideo ? (
+              <video src={thumbnailUrl} className={styles.previewImage} muted preload="metadata" />
+            ) : (
+              <img src={thumbnailUrl} alt={player.name} className={styles.previewImage} />
+            )
           ) : (
             <FiMonitor /> 
           )}

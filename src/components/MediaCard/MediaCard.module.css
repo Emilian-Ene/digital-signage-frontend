@@ -13,10 +13,9 @@
   width: 100%;
   aspect-ratio: 16 / 9;
   background-color: #f1f5f9;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   border-bottom: 1px solid #e2e8f0;
+  /* ✅ FIX: Add this line to hide the overflowing parts of the media */
+  overflow: hidden; 
 }
 
 .previewImage {

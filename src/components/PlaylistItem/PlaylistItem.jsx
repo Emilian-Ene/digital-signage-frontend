@@ -1,74 +1,76 @@
-// src/components/PlaylistItem/PlaylistItem.jsx
-
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './PlaylistItem.module.css';
-import { FiMove, FiEdit, FiEye, FiTrash2 } from 'react-icons/fi';
-// --- NEW: Import the necessary tools from dnd-kit ---
+// ✅ CHANGED: Replaced 'FiGripVertical' with 'FiMenu'
+import { FiMenu, FiEye, FiEdit2, FiTrash2 } from 'react-icons/fi';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
 const API_BASE_URL = 'http://localhost:3000';
 
 const PlaylistItem = ({ id, item, onDelete, onDurationChange }) => {
-  const media = item.media;
-  const thumbnailUrl = `${API_BASE_URL}${media.fileUrl}`;
-  const [duration, setDuration] = useState(item.duration);
-
-  // --- NEW: This is the hook that makes the component draggable ---
   const {
     attributes,
     listeners,
     setNodeRef,
     transform,
     transition,
-  } = useSortable({ id: id });
+  } = useSortable({ id });
 
-  // This style will be applied to the main div to make it move
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
   };
+  
+  // This check is robust against items with null media
+  const media = item?.media;
+  if (!media) return null; // Don't render if media is missing
 
-  const handleDurationChange = (e) => {
-    const newDuration = parseInt(e.target.value, 10) || 0;
-    setDuration(newDuration);
-  };
-
-  const handleBlur = () => {
-    onDurationChange(duration);
-  };
+  const isVideo = media.mediaType === 'video';
+  const thumbnailUrl = `${API_BASE_URL}${media.fileUrl}`;
 
   return (
-    // --- APPLY THE DND PROPS TO THE MAIN DIV ---
-    <div ref={setNodeRef} style={style} {...attributes} className={styles.itemRow}>
-      
-      {/* The drag handle gets the 'listeners' */}
-      <div {...listeners} className={styles.dragHandle} title="Drag to reorder">
-        <FiMove />
-      </div>
+    <div ref={setNodeRef} style={style} className={styles.playlistItem}>
+      <button {...listeners} {...attributes} className={styles.dragHandle}>
+        {/* ✅ CHANGED: Replaced the icon component here as well */}
+        <FiMenu />
+      </button>
 
       <div className={styles.thumbnail}>
-        <img src={thumbnailUrl} alt={media.friendlyName} />
+        {isVideo ? (
+          <video 
+            src={thumbnailUrl} 
+            className={styles.previewMedia} 
+            muted 
+            preload="metadata" 
+          />
+        ) : (
+          <img 
+            src={thumbnailUrl} 
+            alt={media.friendlyName} 
+            className={styles.previewMedia} 
+          />
+        )}
       </div>
-      <div className={styles.details}>
-        <span className={styles.name}>{media.friendlyName}</span>
-        <span className={styles.type}>{media.mediaType}</span>
+
+      <div className={styles.itemInfo}>
+        <span className={styles.itemName}>{media.friendlyName}</span>
+        <span className={styles.itemType}>{media.mediaType}</span>
       </div>
-      <div className={styles.spacer}></div>
+      
       <div className={styles.duration}>
         <input 
           type="number" 
           className={styles.durationInput} 
-          value={duration}
-          onChange={handleDurationChange}
-          onBlur={handleBlur}
+          value={item.duration}
+          onChange={(e) => onDurationChange(parseInt(e.target.value, 10))}
         />
-        <span className={styles.durationLabel}>s</span>
+        <span>s</span>
       </div>
+
       <div className={styles.actions}>
-        <button className={styles.actionBtn}><FiEdit /></button>
-        <button className={styles.actionBtn}><FiEye /></button>
-        <button onClick={onDelete} className={styles.actionBtn}><FiTrash2 /></button>
+        <button className={styles.iconBtn} title="Preview"><FiEye /></button>
+        <button className={styles.iconBtn} title="Edit"><FiEdit2 /></button>
+        <button className={styles.iconBtn} title="Delete" onClick={onDelete}><FiTrash2 /></button>
       </div>
     </div>
   );

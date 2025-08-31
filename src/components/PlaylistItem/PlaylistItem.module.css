@@ -1,97 +1,92 @@
 /* src/components/PlaylistItem/PlaylistItem.module.css */
 
-.itemRow {
+.playlistItem {
   display: flex;
   align-items: center;
-  gap: 15px;
   padding: 10px;
-  border-bottom: 1px solid #f1f5f9;
-}
-.itemRow:hover {
-  background-color: #f8f9fa;
-}
-.itemRow:last-child {
-  border-bottom: none;
+  background-color: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  margin-bottom: 10px;
 }
 
 .dragHandle {
   cursor: grab;
-  color: #9ca3af;
-  padding: 5px;
-}
-.dragHandle:active {
-  cursor: grabbing;
+  color: #94a3b8;
+  margin-right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
 }
 
 .thumbnail {
-  width: 90px; /* Wider thumbnail */
-  height: 50px;
+  width: 120px;
+  height: 67.5px; /* 16:9 Aspect Ratio */
+  background-color: #f1f5f9;
   border-radius: 4px;
   overflow: hidden;
+  margin-right: 15px;
   flex-shrink: 0;
-  background-color: #e2e8f0;
 }
-.thumbnail img {
+
+.previewMedia {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.details {
+.itemInfo {
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  min-width: 0; /* Prevent text from overflowing */
+  overflow: hidden; /* For text ellipsis */
 }
-.name {
+
+.itemName {
   font-weight: 500;
-  color: #111827;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-.type {
-  font-size: 0.8rem;
-  color: #6b7280;
   text-transform: capitalize;
 }
 
-.spacer {
-  flex-grow: 1;
+.itemType {
+  font-size: 0.8rem;
+  color: #64748b;
+  text-transform: capitalize;
 }
 
 .duration {
   display: flex;
   align-items: center;
-  gap: 5px;
-  color: #6b7280;
-}
-.durationInput {
-  width: 50px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  padding: 6px 8px;
-  text-align: center;
-  font-size: 0.9rem;
-}
-.durationInput:focus {
-  outline: none;
-  border-color: #10b981;
-}
-.durationLabel {
-  font-size: 0.9rem;
+  margin: 0 20px;
+  color: #64748b;
 }
 
+.durationInput {
+  width: 50px;
+  padding: 5px 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  text-align: center;
+  margin-right: 5px;
+}
 
 .actions {
   display: flex;
-  gap: 15px;
-  margin-left: 20px;
+  align-items: center;
+  gap: 10px;
 }
-.actionBtn {
-  background: none; border: none; cursor: pointer;
-  color: #9ca3af; font-size: 1.1rem;
+
+.iconBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #94a3b8;
+  font-size: 1.1rem;
+  padding: 5px;
 }
-.actionBtn:hover {
-  color: #2d3748;
+
+.iconBtn:hover {
+  color: #1e293b;
 }

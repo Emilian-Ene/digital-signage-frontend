@@ -10,24 +10,30 @@ import {
 import OfflineContent from '../components/OfflineContent/OfflineContent';
 import PlaylistItem from '../components/PlaylistItem/PlaylistItem';
 
-// --- Import from dnd-kit ---
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 
 const API_BASE_URL = 'http://localhost:3000';
 
-// --- UPDATED SUB-COMPONENT to show thumbnails ---
-const LibraryItem = ({ item, onAdd }) => (
-  <div className={styles.libraryItem}>
-    <div className={styles.itemThumbnail}>
-      {item.thumbnailUrl && (
-        <img src={item.thumbnailUrl} alt={item.name} className={styles.itemPreviewImage} />
-      )}
+const LibraryItem = ({ item, onAdd }) => {
+  const isVideo = item.mediaType === 'video';
+  const fileUrl = `${API_BASE_URL}${item.fileUrl}`;
+  
+  return (
+    <div className={styles.libraryItem}>
+      <div className={styles.itemThumbnail}>
+        {isVideo ? (
+          <video src={fileUrl} className={styles.itemPreviewImage} muted preload="metadata" />
+        ) : (
+          <img src={fileUrl} alt={item.friendlyName} className={styles.itemPreviewImage} />
+        )}
+      </div>
+      <span className={styles.itemName}>{item.friendlyName}</span>
+      <button onClick={onAdd} className={styles.addButton}>Add</button>
     </div>
-    <span className={styles.itemName}>{item.name}</span>
-    <button onClick={onAdd} className={styles.addButton}>Add</button>
-  </div>
-);
+  );
+};
+
 
 const PlaylistDetailsPage = () => {
   const { id } = useParams();
@@ -40,8 +46,8 @@ const PlaylistDetailsPage = () => {
   const [playlistItems, setPlaylistItems] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
   
-  const hasChanges = playlist 
-    ? JSON.stringify(playlist.items.map(i => ({ media: i.media._id, duration: i.duration }))) !== 
+  const hasChanges = playlist
+    ? JSON.stringify(playlist.items.filter(i => i && i.media).map(i => ({ media: i.media._id, duration: i.duration }))) !==
       JSON.stringify(playlistItems.map(i => ({ media: i.media._id, duration: i.duration })))
     : false;
 
@@ -59,7 +65,16 @@ const PlaylistDetailsPage = () => {
       const mediaData = await mediaResponse.json();
       setPlaylist(playlistData);
       setMediaLibrary(mediaData);
-      setPlaylistItems(playlistData.items || []);
+      
+      // ✅ 1. CHANGED: Assign a unique instanceId to each item when loading data.
+      const initialItems = (playlistData.items || [])
+        .filter(item => item && item.media)
+        .map((item, index) => ({
+          ...item,
+          instanceId: `item-${Date.now()}-${index}`
+        }));
+      setPlaylistItems(initialItems);
+
     } catch (e) {
       console.error(e);
       setError(e.message);
@@ -73,22 +88,29 @@ const PlaylistDetailsPage = () => {
   }, [id]);
 
   const handleAddItem = (mediaItem) => {
+    // ✅ 2. CHANGED: Assign a unique instanceId when adding a new item.
     const newItem = {
+      instanceId: `item-${Date.now()}-${Math.random()}`,
       media: mediaItem,
       duration: mediaItem.mediaType === 'image' ? 10 : 0,
     };
     setPlaylistItems(currentItems => [...currentItems, newItem]);
   };
 
-  const handleDeleteItem = (indexToDelete) => {
-    setPlaylistItems(currentItems => currentItems.filter((_, index) => index !== indexToDelete));
+  // ✅ 3. CHANGED: Updated to use the unique instanceId instead of the array index.
+  const handleDeleteItem = (instanceIdToDelete) => {
+    setPlaylistItems(currentItems => currentItems.filter(item => item.instanceId !== instanceIdToDelete));
   };
 
-  const handleDurationChange = (indexToChange, newDuration) => {
+  // ✅ 4. CHANGED: Updated to use the unique instanceId instead of the array index.
+  const handleDurationChange = (instanceIdToChange, newDuration) => {
     setPlaylistItems(currentItems => {
-      const newItems = [...currentItems];
-      newItems[indexToChange] = { ...newItems[indexToChange], duration: newDuration };
-      return newItems;
+      return currentItems.map(item => {
+        if (item.instanceId === instanceIdToChange) {
+          return { ...item, duration: newDuration };
+        }
+        return item;
+      });
     });
   };
 
@@ -127,8 +149,9 @@ const PlaylistDetailsPage = () => {
     const { active, over } = event;
     if (active.id !== over.id) {
       setPlaylistItems((items) => {
-        const oldIndex = items.findIndex(item => item.media._id === active.id);
-        const newIndex = items.findIndex(item => item.media._id === over.id);
+        // ✅ 5. CHANGED: Use the unique instanceId to find items for reordering.
+        const oldIndex = items.findIndex(item => item.instanceId === active.id);
+        const newIndex = items.findIndex(item => item.instanceId === over.id);
         return arrayMove(items, oldIndex, newIndex);
       });
     }
@@ -146,10 +169,7 @@ const PlaylistDetailsPage = () => {
             {mediaLibrary.map(item => 
               <LibraryItem 
                 key={item._id} 
-                item={{
-                  name: item.friendlyName,
-                  thumbnailUrl: `${API_BASE_URL}${item.fileUrl}`
-                }} 
+                item={item} 
                 onAdd={() => handleAddItem(item)}
               />
             )}
@@ -220,18 +240,19 @@ const PlaylistDetailsPage = () => {
               collisionDetection={closestCenter}
               onDragEnd={handleDragEnd}
             >
+              {/* ✅ 6. CHANGED: Tell dnd-kit and PlaylistItem to use the unique instanceId. */}
               <SortableContext
-                items={playlistItems.map(item => item.media._id)}
+                items={playlistItems.map(item => item.instanceId)}
                 strategy={verticalListSortingStrategy}
               >
                 <div className={styles.playlistItemList}>
-                  {playlistItems.map((item, index) => (
+                  {playlistItems.map((item) => (
                     <PlaylistItem 
-                      key={`${item.media._id}-${index}`}
-                      id={item.media._id}
+                      key={item.instanceId}
+                      id={item.instanceId}
                       item={item} 
-                      onDelete={() => handleDeleteItem(index)}
-                      onDurationChange={(newDuration) => handleDurationChange(index, newDuration)}
+                      onDelete={() => handleDeleteItem(item.instanceId)}
+                      onDurationChange={(newDuration) => handleDurationChange(item.instanceId, newDuration)}
                     />
                   ))}
                 </div>
