@@ -1,0 +1,97 @@
+/* src/components/PlaylistItem/PlaylistItem.module.css */
+
+.itemRow {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+  border-bottom: 1px solid #f1f5f9;
+}
+.itemRow:hover {
+  background-color: #f8f9fa;
+}
+.itemRow:last-child {
+  border-bottom: none;
+}
+
+.dragHandle {
+  cursor: grab;
+  color: #9ca3af;
+  padding: 5px;
+}
+.dragHandle:active {
+  cursor: grabbing;
+}
+
+.thumbnail {
+  width: 90px; /* Wider thumbnail */
+  height: 50px;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background-color: #e2e8f0;
+}
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0; /* Prevent text from overflowing */
+}
+.name {
+  font-weight: 500;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.type {
+  font-size: 0.8rem;
+  color: #6b7280;
+  text-transform: capitalize;
+}
+
+.spacer {
+  flex-grow: 1;
+}
+
+.duration {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #6b7280;
+}
+.durationInput {
+  width: 50px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 6px 8px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+.durationInput:focus {
+  outline: none;
+  border-color: #10b981;
+}
+.durationLabel {
+  font-size: 0.9rem;
+}
+
+
+.actions {
+  display: flex;
+  gap: 15px;
+  margin-left: 20px;
+}
+.actionBtn {
+  background: none; border: none; cursor: pointer;
+  color: #9ca3af; font-size: 1.1rem;
+}
+.actionBtn:hover {
+  color: #2d3748;
+}

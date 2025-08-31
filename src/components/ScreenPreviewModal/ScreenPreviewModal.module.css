@@ -1,0 +1,54 @@
+/* src/components/ScreenPreviewModal/ScreenPreviewModal.module.css */
+
+.modal {
+  background-color: #fff;
+  border-radius: 12px;
+  width: 90vw;
+  max-width: 800px;
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- THIS IS THE NEW FLEXBOX STYLING --- */
+.header {
+  padding: 15px 20px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex; /* Make it a flex container */
+  justify-content: space-between; /* Push items to the edges */
+  align-items: center;
+  flex-shrink: 0;
+}
+/* --- END OF NEW STYLING --- */
+
+.title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #718096;
+}
+
+.screenName {
+  color: #111827;
+  font-weight: 700;
+}
+
+.playlistNameInfo {
+  font-weight: 600;
+  color: #718096;
+  font-size: 1rem;
+  /* This will be centered automatically by space-between */
+}
+
+.closeBtn {
+  background: none; 
+  border: none; 
+  font-size: 1.5rem; 
+  color: #9ca3af; 
+  cursor: pointer;
+  padding: 5px;
+}
+
+.content {
+  padding: 20px;
+  background-color: #f8f9fa;
+}

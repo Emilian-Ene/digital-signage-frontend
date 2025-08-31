@@ -1,0 +1,262 @@
+/* src/pages/PlaylistDetailsPage.module.css */
+
+.editorLayout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+.mainCanvas {
+  flex-grow: 1;
+  padding: 20px 30px;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8f9fa;
+}
+.canvasHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+.titleGroup {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.backButton { 
+  background: none; border: none; cursor: pointer;
+  font-size: 1.5rem; color: #6b7280; padding: 0;
+  display: flex; align-items: center;
+}
+.playlistTitle { 
+  font-size: 1.5rem; font-weight: 600; 
+  color: #111827; line-height: 1; 
+}
+.titleEditBtn { 
+  background: none; border: none; cursor: pointer;
+  font-size: 1.2rem; color: #9ca3af;
+  display: flex; align-items: center;
+}
+.headerActions {
+  display: flex;
+  gap: 10px;
+}
+.actionButton {
+  padding: 8px 16px; border: 1px solid #d1d5db;
+  background-color: #fff; cursor: pointer;
+  border-radius: 6px; font-weight: 500;
+}
+.previewButton, .publishButton {
+  background-color: #10b981;
+  color: #fff;
+  border-color: #10b981;
+}
+.playlistSettings, .layoutSettings {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  padding: 15px 20px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 15px;
+  flex-shrink: 0;
+}
+.playlistSettings {
+  gap: 20px;
+}
+.layoutSettings {
+  justify-content: space-between;
+}
+.settingItem {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+.settingLabel {
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+.settingValue {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #111827;
+  border: 1px solid #d1d5db;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.settingValue strong {
+  font-weight: 600;
+}
+.settingValue .chevron {
+  margin-left: auto;
+  color: #9ca3af;
+}
+.layoutLabel {
+  color: #6b7280; font-size: 0.9rem;
+  display: flex; align-items: center; gap: 8px;
+}
+.viewToggle { display: flex; }
+.toggleBtn {
+  padding: 8px 16px; border: 1px solid #d1d5db;
+  background-color: #fff; cursor: pointer; font-size: 0.9rem;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.toggleBtn.active { background-color: #e5e7eb; }
+.toggleBtn:first-child { border-radius: 6px 0 0 6px; border-right: none; }
+.toggleBtn:last-child { border-radius: 0 6px 6px 0; }
+.playlistContent {
+  flex-grow: 1;
+  background-color: #fff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.emptyPlaylist { text-align: center; color: #718096; }
+.emptyPlaylistIcon { font-size: 4rem; opacity: 0.5; margin-bottom: 15px; }
+.emptyPlaylist h3 { font-size: 1.2rem; margin-bottom: 10px; color: #2d3748; }
+.emptyPlaylist p { font-size: 0.9rem; max-width: 300px; }
+.playlistItemList {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding: 10px;
+}
+.contentLibrary {
+  width: 400px;
+  flex-shrink: 0;
+  border-left: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+}
+.libraryHeader {
+  padding: 20px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex-shrink: 0;
+}
+.uploadButton {
+  background-color: #10b981;
+  color: white;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.searchWrapper { position: relative; }
+.searchInput {
+  width: 100%;
+  padding: 8px 8px 8px 35px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+.searchIcon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+}
+.libraryTabs {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  border-bottom: 1px solid #e2e8f0;
+  flex-shrink: 0;
+}
+.tab {
+  background: none; border: none; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 5px; font-size: 0.8rem; color: #6b7280;
+  padding: 5px 10px;
+}
+.tab.active {
+  color: #10b981;
+  border-bottom: 2px solid #10b981;
+}
+.libraryContent {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+.contentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.createSceneBtn {
+  background-color: #10b981;
+  color: white;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.itemList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.libraryItem {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 5px;
+}
+.itemThumbnail {
+  width: 50px;
+  height: 30px;
+  background-color: #e2e8f0;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.itemName {
+  flex-grow: 1;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.addButton {
+  background-color: #10b981;
+  color: white;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+}
+.itemPreviewImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.itemPlaceholderIcon {
+  font-size: 1.5rem;
+  color: #cbd5e0;
+}

@@ -5,45 +5,46 @@ import styles from './PlayerCard.module.css';
 import { FiMonitor } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
-const getDisplayStatus = (player) => {
-  // --- THIS IS THE FIX ---
-  // First, check if the player or lastHeartbeat data even exists.
-  // If not, default to 'Offline'.
-  if (!player || !player.lastHeartbeat) {
-    return { text: 'Offline', className: 'offline' };
-  }
+const API_BASE_URL = 'http://localhost:3000';
 
-  const lastHeartbeat = new Date(player.lastHeartbeat);
-  const now = new Date();
-  // Check if lastHeartbeat is a valid date
-  if (isNaN(lastHeartbeat.getTime())) {
-    return { text: 'Offline', className: 'offline' };
-  }
-
-  const diffInSeconds = (now - lastHeartbeat) / 1000;
-
-  if (diffInSeconds <= 35) {
-    return { text: 'Online', className: 'online' };
-  } else {
-    return { text: 'Offline', className: 'offline' };
-  }
-};
-
-export default function PlayerCard({ player, onDeleteClick }) {
-  const displayStatus = getDisplayStatus(player);
+// getDisplayStatus function is no longer needed here, it's in the parent
+const PlayerCard = ({ player, onDeleteClick, onPreviewClick }) => { // <-- Add onPreviewClick prop
   
+  // The player object now has a pre-calculated displayStatus
+  const displayStatus = player.displayStatus || { text: 'Offline', className: 'offline' };
+  
+  // Logic to find the thumbnail URL is also simplified
+  const firstItem = player.assignedContent?.contentId?.items?.[0];
+  const thumbnailUrl = firstItem?.media?.fileUrl ? `${API_BASE_URL}${firstItem.media.fileUrl}` : null;
+  const playlistName = player.assignedContent?.contentId?.name || 'None';
+
   return (
     <div className={`${styles.playerCard} ${styles[displayStatus.className]}`}>
-      <div className={styles.playerThumbnail}>
-        <FiMonitor /> 
-      </div>
-      <div className={styles.playerDetails}>
-        <h3 className={styles.playerName}>{player.name || 'Unnamed Screen'}</h3>
-        <div className={styles.playerTags}>
-          <div className={styles.playerStatusDot}></div>
-          <span className={styles.statusTag}>{displayStatus.text}</span>
+      <div className={styles.playerInfo}>
+        
+        {/* The thumbnail is now a clickable button */}
+        <button onClick={onPreviewClick} className={styles.playerThumbnail}>
+          {thumbnailUrl ? (
+            <img src={thumbnailUrl} alt={player.name} className={styles.previewImage} />
+          ) : (
+            <FiMonitor /> 
+          )}
+        </button>
+
+        <div className={styles.playerDetails}>
+          <h3 className={styles.playerName}>{player.name || 'Unnamed Screen'}</h3>
+          <div className={styles.playerTags}>
+            <div className={styles.playerStatusDot}></div>
+            <span className={styles.statusTag}>{displayStatus.text}</span>
+          </div>
         </div>
       </div>
+
+      <div className={styles.nowPlaying}>
+        <span className={styles.nowPlayingLabel}>Now Playing:</span>
+        <span className={styles.nowPlayingName}>{playlistName}</span>
+      </div>
+      
       <div className={styles.playerActions}>
         <Link to={`/screens/${player._id}`} className={styles.iconBtn} title="Settings">
           <i className="fas fa-cog"></i>
@@ -59,3 +60,5 @@ export default function PlayerCard({ player, onDeleteClick }) {
     </div>
   );
 }
+
+export default PlayerCard;

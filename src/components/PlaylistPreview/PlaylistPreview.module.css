@@ -1,0 +1,21 @@
+/* src/components/PlaylistPreview/PlaylistPreview.module.css */
+.previewBox {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-color: #000000;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.noContent {
+  color: #6b7280;
+  font-weight: 500;
+}
+.media {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}

@@ -5,29 +5,21 @@ import MainHeader from '../components/MainHeader/MainHeader';
 import PlayerCard from '../components/PlayerCard/PlayerCard';
 import DeleteConfirmModal from '../components/DeleteConfirmModal/DeleteConfirmModal';
 import OfflineContent from '../components/OfflineContent/OfflineContent';
+import ScreenPreviewModal from '../components/ScreenPreviewModal/ScreenPreviewModal'; // <-- IMPORT PREVIEW MODAL
 import '../index.css';
 
 const API_BASE_URL = 'http://localhost:3000/api';
-
-// NOTE: We are moving the cache key and getDisplayStatus function outside
-// because they are pure helpers and don't need to be part of the component.
 const SCREENS_CACHE_KEY = 'pixelFlowScreensCacheWithStatus';
 
 const getDisplayStatus = (player) => {
-  if (!player || !player.lastHeartbeat) {
-    return { text: 'Offline', className: 'offline' };
-  }
+  if (!player || !player.lastHeartbeat) return { text: 'Offline', className: 'offline' };
   const lastHeartbeat = new Date(player.lastHeartbeat);
   const now = new Date();
-  if (isNaN(lastHeartbeat.getTime())) {
-    return { text: 'Offline', className: 'offline' };
-  }
+  if (isNaN(lastHeartbeat.getTime())) return { text: 'Offline', className: 'offline' };
   const diffInSeconds = (now - lastHeartbeat) / 1000;
-  if (diffInSeconds <= 35) {
-    return { text: 'Online', className: 'online' };
-  } else {
-    return { text: 'Offline', className: 'offline' };
-  }
+  return diffInSeconds <= 35 
+    ? { text: 'Online', className: 'online' } 
+    : { text: 'Offline', className: 'offline' };
 };
 
 const ScreensPage = () => {
@@ -42,72 +34,72 @@ const ScreensPage = () => {
   const [error, setError] = useState(null);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [screenToDelete, setScreenToDelete] = useState(null);
+  
+  // --- NEW STATE FOR PREVIEW MODAL ---
+  const [isPreviewModalOpen, setPreviewModalOpen] = useState(false);
+  const [screenToPreview, setScreenToPreview] = useState(null);
 
-  const fetchScreens = useCallback(async (isInitialLoad = true) => {
-    // --- THIS IS THE FIX ---
-    // If this is a main fetch (not a silent poll), clear any previous error
-    // and show the loading state. This gives immediate feedback on "Retry".
-    if (isInitialLoad) {
-      setIsLoading(true);
-      setError(null);
-    }
-    
+  const fetchScreens = useCallback(async (isSilent = false) => {
+    if (!isSilent) setIsLoading(true);
     try {
       const response = await fetch(`${API_BASE_URL}/players`);
       if (!response.ok) throw new Error('Could not connect to the server.');
-      
       const allPlayers = await response.json();
       const visiblePlayers = allPlayers.filter(player => player.status !== 'unpaired');
-
       const screensWithStatus = visiblePlayers.map(player => ({
         ...player,
         displayStatus: getDisplayStatus(player)
       }));
-      
       setScreens(screensWithStatus);
       localStorage.setItem(SCREENS_CACHE_KEY, JSON.stringify(screensWithStatus));
-      // On a successful fetch, ensure the error is cleared.
-      setError(null); 
-      
+      setError(null);
     } catch (e) {
-      console.error(e);
       setError(e.message);
     } finally {
-      // Always turn off the main loading spinner after an initial fetch attempt.
-      if (isInitialLoad) {
-        setIsLoading(false);
-      }
+      if (!isSilent) setIsLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    fetchScreens(true);
-    const intervalId = setInterval(() => fetchScreens(false), 5000); // Polls are not "initial loads"
+    fetchScreens(false);
+    const intervalId = setInterval(() => fetchScreens(true), 5000);
     return () => clearInterval(intervalId);
   }, [fetchScreens]);
 
-  const showDeleteConfirmation = (id, name) => { /* ... unchanged ... */ };
-  const handlePerformDelete = async () => { /* ... unchanged ... */ };
+  // --- NEW HANDLER FOR PREVIEW ---
+  const handlePreviewClick = (screen) => {
+    setScreenToPreview(screen);
+    setPreviewModalOpen(true);
+  };
+
+  const showDeleteConfirmation = (id, name) => {
+    setScreenToDelete({ id, name });
+    setDeleteModalOpen(true);
+  };
+
+  const handlePerformDelete = async () => {
+    if (!screenToDelete) return;
+    try {
+      await fetch(`${API_BASE_URL}/players/${screenToDelete.id}`, { method: 'DELETE' });
+      setDeleteModalOpen(false);
+      setScreenToDelete(null);
+      fetchScreens(false);
+    } catch (error) {
+      alert(`Error: ${error.message}`);
+    }
+  };
 
   const renderContent = () => {
-    // If there's an error, it takes priority. The onRetry will call fetchScreens(true).
-    if (error) {
-      return <OfflineContent onRetry={() => fetchScreens(true)} />;
-    }
-    // If we're loading, show the loading message.
-    if (isLoading) {
-      return <p className="loading-message">Loading screens...</p>;
-    }
-    // If we have no data, show the empty message.
-    if (screens.length === 0) {
-      return <p className="empty-message">No paired screens found.</p>;
-    }
-    // Otherwise, render the list.
+    if (isLoading) return <p className="loading-message">Loading screens...</p>;
+    if (error) return <OfflineContent onRetry={() => fetchScreens(false)} />;
+    if (screens.length === 0) return <p className="empty-message">No paired screens found.</p>;
+    
     return screens.map(player => (
       <PlayerCard 
         key={player._id} 
         player={player} 
-        onDeleteClick={showDeleteConfirmation} 
+        onDeleteClick={showDeleteConfirmation}
+        onPreviewClick={() => handlePreviewClick(player)} // <-- PASS THE HANDLER
       />
     ));
   };
@@ -123,6 +115,12 @@ const ScreensPage = () => {
         onClose={() => setDeleteModalOpen(false)}
         onConfirm={handlePerformDelete}
         screenName={screenToDelete?.name}
+      />
+      {/* --- RENDER THE NEW MODAL --- */}
+      <ScreenPreviewModal
+        isOpen={isPreviewModalOpen}
+        onClose={() => setPreviewModalOpen(false)}
+        screen={screenToPreview}
       />
     </div>
   );

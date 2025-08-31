@@ -1,0 +1,109 @@
+/* src/pages/MediaPage.module.css */
+
+.headerActions {
+  display: flex;
+  gap: 15px;
+}
+
+.btnPrimary {
+  background-color: #10b981; /* A nice green */
+  color: white;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s;
+}
+.btnPrimary:hover {
+  background-color: #059669;
+}
+.btnPrimary:disabled {
+  background-color: #6ee7b7;
+  cursor: not-allowed;
+}
+
+.btnLight {
+  background-color: #fff;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.btnLight:disabled {
+  background-color: #f8f9fa;
+  cursor: not-allowed;
+}
+
+.storageBar {
+  margin-top: 30px;
+}
+
+.storageInfo {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #718096;
+  margin-bottom: 8px;
+}
+
+.progressBar {
+  width: 100%;
+  height: 6px;
+  background-color: #e2e8f0;
+  border-radius: 3px;
+}
+
+.progress {
+  height: 100%;
+  background-color: #10b981;
+  border-radius: 3px;
+}
+
+.emptyState {
+  background-color: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 60px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.emptyStateImage {
+  width: 200px;
+  height: auto;
+  margin-bottom: 25px;
+}
+
+.emptyStateTitle {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #2d3748;
+  margin-bottom: 15px;
+}
+
+.emptyStateText {
+  font-size: 0.9rem;
+  color: #718096;
+  max-width: 450px;
+  line-height: 1.6;
+}
+
+/* src/pages/MediaPage.module.css */
+
+.mediaGrid {
+  display: grid;
+  /* This creates a responsive grid that shows as many columns as can fit */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+}

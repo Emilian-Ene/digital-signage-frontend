@@ -1,5 +1,6 @@
 // src/pages/ScreenDetailsPage.jsx
 
+import PlaylistPreview from '../components/PlaylistPreview/PlaylistPreview';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import MainHeader from '../components/MainHeader/MainHeader';
@@ -119,7 +120,7 @@ const ScreenDetailsPage = () => {
       <div className={styles.detailsLayout}>
         <div className={styles.previewColumn}>
           <h3 className={styles.columnTitle}>Preview</h3>
-          <div className={styles.previewBox}></div>
+          <PlaylistPreview playlist={screen.assignedContent?.contentId} />
           <div className={styles.previewInfo}>
             <span>Now playing playlist:</span>
             <span className={styles.infoValue}>
