@@ -1,27 +1,27 @@
 // src/components/MediaCard/MediaCard.jsx
 
-import React from 'react';
+import React from 'react'; // ✅ 1. useRef is no longer needed
 import styles from './MediaCard.module.css';
-// FiVideo is no longer needed unless you want a fallback, but FiImage can be removed.
 import { FiShare2, FiTrash2, FiMoreVertical } from 'react-icons/fi';
 
 const API_BASE_URL = 'http://localhost:3000';
 
+// ✅ 2. This component is now simplified for constant autoplay
 const MediaCard = ({ media, onDeleteClick }) => {
-  // ✅ CHANGED: Check for video type specifically for clarity.
   const isVideo = media.mediaType === 'video';
   const fileUrl = `${API_BASE_URL}${media.fileUrl}`;
 
   return (
     <div className={styles.card}>
       <div className={styles.thumbnail}>
-        {/* ✅ CHANGED: This block now handles both images and videos. */}
         {isVideo ? (
           <video
             src={fileUrl}
-            className={styles.previewImage} // Reuse the same style as the image
+            className={styles.previewImage}
             muted
-            preload="metadata" // Helps to load the first frame as a preview
+            autoPlay // Add this
+            loop     // Add this
+            preload="metadata"
           />
         ) : (
           <img 

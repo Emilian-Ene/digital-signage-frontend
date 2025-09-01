@@ -1,7 +1,7 @@
 /* src/components/Sidebar/Sidebar.module.css */
 
 .sidebar {
-  width: 250px;
+  width: 400px;
   background-color: #1a202c; /* Dark background for sidebar */
   color: #ffffff;
   padding: 20px 0;
@@ -12,13 +12,15 @@
 
 .sidebarHeader {
   padding: 0 25px;
+  margin: auto;
   margin-bottom: 30px;
 }
 
 .logo {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: bold;
   color: #fff;
+  
 }
 
 .sidebarNav {
@@ -31,7 +33,7 @@
   color: #a0aec0; /* Light gray text */
   text-decoration: none;
   padding: 12px 25px;
-  font-size: 15px;
+  font-size: 16px;
   display: flex;
   align-items: center;
   gap: 15px;

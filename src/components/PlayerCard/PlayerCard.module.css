@@ -1,57 +1,63 @@
 /* src/components/PlayerCard/PlayerCard.module.css */
 
-.playerCard {
+.card {
   background-color: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
   display: flex;
-  align-items: center;
-  /* --- THIS IS THE KEY CHANGE --- */
-  justify-content: space-between; /* This spaces out the direct children */
-  gap: 20px;
-  transition: box-shadow 0.2s ease-in-out;
+  flex-direction: column;
+  border-left: 4px solid transparent;
+  /* ✅ CHANGED: Added 'transform' to the transition */
+  transition: border-color 0.3s, box-shadow 0.2s, transform 0.2s ease-in-out;
 }
 
-.playerCard:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+/* ✅ ADDED: This new rule makes the card lift up on hover */
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
 }
 
-/* --- NEW GROUPING DIV --- */
-.playerInfo {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
+.card.online { border-color: #28a745; }
+.card.offline { border-color: #dc3545; }
 
-.playerThumbnail {
-  width: 80px;
-  height: 45px;
-  background-color: #f7fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  flex-shrink: 0;
+.thumbnail {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-color: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
-  color: #a0aec0;
-  overflow: hidden;
   cursor: pointer;
+  padding: 0;
+  border-width: 0;
 }
 
-.previewImage {
+.previewMedia {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.playerDetails {
-  /* No flex-grow needed here anymore */
+.fallbackIcon {
+  font-size: 3rem;
+  color: #cbd5e0;
+}
+
+.cardBody {
+  padding: 15px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  min-width: 150px; /* Give it some minimum width */
+  gap: 15px;
+  flex-grow: 1;
+}
+
+.playerDetails {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
 .playerName {
@@ -65,6 +71,10 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  background-color: #f8fafc;
+  padding: 4px 8px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
 }
 
 .playerStatusDot {
@@ -75,39 +85,19 @@
 }
 
 .statusTag {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 500;
   text-transform: capitalize;
-  padding: 4px 10px;
-  border-radius: 16px;
 }
 
-/* Status-specific colors */
-.playerCard.online .playerStatusDot {
-  background-color: #28a745;
-  animation: pulse-green 2s infinite;
-}
-.playerCard.online .statusTag {
-  color: #28a745;
-  background-color: rgba(40, 167, 69, 0.1);
-}
-.playerCard.offline .playerStatusDot {
-  background-color: #dc3545;
-  animation: pulse-red 2s infinite;
-}
-.playerCard.offline .statusTag {
-  color: #dc3545;
-  background-color: rgba(220, 53, 69, 0.1);
-}
-
-/* --- REMOVED THE SPACER --- */
+.card.online .playerStatusDot { background-color: #28a745; }
+.card.online .statusTag { color: #28a745; }
+.card.offline .playerStatusDot { background-color: #dc3545; }
+.card.offline .statusTag { color: #dc3545; }
 
 .nowPlaying {
-  display: flex;
-  flex-direction: column;
-  text-align: center; /* Center align the text */
-  color: #718096;
   font-size: 0.8rem;
+  color: #718096;
 }
 
 .nowPlayingName {
@@ -120,8 +110,11 @@
   max-width: 200px;
 }
 
-.playerActions {
+.cardFooter {
+  border-top: 1px solid #e2e8f0;
+  padding: 8px 15px;
   display: flex;
+  justify-content: flex-end;
   gap: 15px;
 }
 
@@ -129,47 +122,11 @@
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 1rem;
   color: #a0aec0;
   transition: color 0.2s;
 }
 
 .iconBtn:hover {
   color: #2d3748;
-}
-
-/* Animation */
-
-@keyframes pulse-green {
-  0% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
-  }
-
-  70% {
-    transform: scale(1);
-    box-shadow: 0 0 0 10px rgba(40, 167, 69, 0);
-  }
-
-  100% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
-  }
-}
-
-@keyframes pulse-red {
-  0% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
-  }
-
-  70% {
-    transform: scale(1);
-    box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
-  }
-
-  100% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
-  }
 }

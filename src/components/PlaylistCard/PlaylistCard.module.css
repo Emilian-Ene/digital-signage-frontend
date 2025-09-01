@@ -1,5 +1,3 @@
-/* src/components/MediaCard/MediaCard.module.css */
-
 .card {
   background-color: #ffffff;
   border-radius: 8px;
@@ -7,14 +5,12 @@
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  /* ✅ ADDED: Add transition for a smooth hover effect */
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
 }
 
-/* ✅ ADDED: This new rule makes the card lift up on hover */
 .card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
 }
 
 .thumbnail {
@@ -22,7 +18,10 @@
   aspect-ratio: 16 / 9;
   background-color: #f1f5f9;
   border-bottom: 1px solid #e2e8f0;
-  overflow: hidden; 
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .previewImage {
@@ -31,44 +30,58 @@
   object-fit: cover;
 }
 
-.videoPlaceholder {
+.fallbackIcon {
   font-size: 3rem;
-  color: #94a3b8;
+  color: #cbd5e0;
 }
 
 .cardBody {
   padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-.fileName {
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.name {
   font-size: 0.9rem;
   font-weight: 500;
   color: #4a5568;
-  margin-bottom: 15px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-.cardActions {
+.orientationTag {
+  background-color: #eef2f7;
+  color: #4a5568;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.cardFooter {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.publishText {
-  color: #10b981; /* Green color */
-  font-weight: 500;
-  font-size: 0.9rem;
-  cursor: pointer;
+.duration {
+  font-size: 0.8rem;
+  color: #718096;
 }
 
-.actionButtons {
+.actions {
   display: flex;
   gap: 10px;
 }
 
-.iconBtn {
+.actionBtn {
   background: none;
   border: none;
   cursor: pointer;
@@ -81,6 +94,6 @@
   transition: color 0.2s;
 }
 
-.iconBtn:hover {
+.actionBtn:hover {
   color: #2d3748;
 }
