@@ -5,6 +5,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import MainHeader from '../components/MainHeader/MainHeader';
 import styles from './ScreenDetailsPage.module.css';
+import { toast } from 'react-toastify'; // ✅ 1. Import toast
 
 const API_BASE_URL = 'http://localhost:3000/api';
 
@@ -64,7 +65,7 @@ const ScreenDetailsPage = () => {
     } finally {
       if (!isPoll) setIsLoading(false);
     }
-  }, [id, playlists.length, hasChanges]);
+  }, [id, playlists.length]);
 
   useEffect(() => {
     fetchData(false);
@@ -98,11 +99,15 @@ const ScreenDetailsPage = () => {
           throw new Error(errorResult.message || 'One update failed.');
         }
       }
-      alert('Changes saved successfully!');
+      
+      toast.success('Changes saved successfully!'); // ✅ 2. Replace alert with toast.success
+      
       fetchData(false);
     } catch (error) {
       console.error('Failed to save changes:', error);
-      alert(`Error: ${error.message}`);
+      
+      toast.error(`Error: ${error.message}`); // ✅ 3. Replace alert with toast.error
+      
     } finally {
       setIsSaving(false);
     }

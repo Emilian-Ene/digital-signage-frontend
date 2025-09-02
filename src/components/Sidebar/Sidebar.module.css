@@ -1,62 +1,72 @@
 /* src/components/Sidebar/Sidebar.module.css */
 
 .sidebar {
-  width: 400px;
-  background-color: #1a202c; /* Dark background for sidebar */
-  color: #ffffff;
-  padding: 20px 0;
+  width: 300px;
+  background-color: #1e293b;
+  color: #e2e8f0;
   display: flex;
   flex-direction: column;
-  flex-shrink: 0; /* Prevent sidebar from shrinking */
+  justify-content: space-between; 
+  padding: 20px;
+  flex-shrink: 0;
 }
 
 .sidebarHeader {
-  padding: 0 25px;
-  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 30px;
-}
-
-.logo {
-  font-size: 22px;
-  font-weight: bold;
-  color: #fff;
+  margin-left: 70px;
   
 }
 
-.sidebarNav {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0;
 }
 
-.navLink {
-  color: #a0aec0; /* Light gray text */
+.logoLink {
   text-decoration: none;
-  padding: 12px 25px;
-  font-size: 16px;
+  color: inherit;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-left: 10px;
+  font-size: 18px;
+}
+
+.menuItem {
+  color: #94a3b8;
+  text-decoration: none;
   display: flex;
   align-items: center;
   gap: 15px;
-  border-left: 3px solid transparent;
-  transition: all 0.2s;
-  cursor: pointer;
+  padding: 10px;
+  border-radius: 6px;
+  transition: background-color 0.2s, color 0.2s;
+  border-left: 4px solid transparent;
 }
 
-.navLink:hover {
-  background-color: rgba(255, 255, 255, 0.05);
-  color: #fff;
+.menuItem:hover {
+  background-color: #334155;
+  color: #ffffff;
 }
 
-.navLink.active {
-  background-color: rgba(0, 123, 255, 0.1); /* Light blue background */
-  color: #007bff; /* Primary blue */
-  font-weight: 500;
-  border-left-color: #007bff;
+/* ✅ CORRECTED: Use :global(.active) to target the class from react-router-dom */
+.menuItem:global(.active) {
+  background-color: #334155; /* Same as hover */
+  color: #ffffff;           /* Same as hover */
+  border-left: 4px solid #10b981; /* Green active border */
 }
+
 
 .sidebarFooter {
-  padding: 20px 25px;
-  border-top: 1px solid #2d3748; /* Darker border */
+  padding-top: 20px;
+  border-top: 1px solid #334155;
 }
 
 .userProfile {
@@ -64,13 +74,15 @@
   align-items: center;
   gap: 12px;
   margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #334155;
 }
 
 .userAvatar {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background-color: #4a5568; /* Grayish blue */
+  background-color: #4a5568;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -80,14 +92,43 @@
 }
 
 .userEmail {
-  font-size: 14px;
-  color: #a0aec0;
+  font-size: 0.9rem;
+  color: #94a3b8;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.logoLink {
-  text-decoration: none;
-  color: inherit;
+.closeButton {
+  display: none;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* --- Consolidated Media Query --- */
+@media (max-width: 768px) {
+  .sidebar {
+    position: absolute;
+    height: 100%;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 999;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .sidebar.closed {
+    transform: translateX(-100%);
+  }
+
+  .closeButton {
+    display: block;
+  }
+
+  .sidebar.closed .closeButton {
+    display: none;
+  }
 }

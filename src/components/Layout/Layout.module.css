@@ -1,12 +1,42 @@
-/* src/components/Layout/Layout.module.css */
-
-.appLayout {
+.layout {
   display: flex;
   height: 100vh;
-  width: 100%;
 }
 
-.pageContent {
+.mainContent {
   flex-grow: 1;
-  overflow-y: auto; /* Allow content to scroll if it's too long */
+  overflow-y: auto;
+  position: relative;
+}
+
+.hamburgerButton {
+  display: none;
+  position: absolute;
+  top: 26px;
+  left: 20px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  z-index: 1000;
+  font-size: 1.5rem;
+  color: #334155;
+}
+
+/* ✅ ADDED: Style for the new overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 998; /* Lower than the sidebar's z-index */
+}
+
+@media (max-width: 768px) {
+  .hamburgerButton {
+    display: block;
+  }
 }

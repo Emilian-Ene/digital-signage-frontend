@@ -5,8 +5,10 @@ import MainHeader from "../components/MainHeader/MainHeader";
 import PlayerCard from "../components/PlayerCard/PlayerCard";
 import DeleteConfirmModal from "../components/DeleteConfirmModal/DeleteConfirmModal";
 import OfflineContent from "../components/OfflineContent/OfflineContent";
+// ✅ CORRECTED: Fixed the typo in the import path below
 import ScreenPreviewModal from "../components/ScreenPreviewModal/ScreenPreviewModal";
-import styles from './ScreensPage.module.css'; // ✅ ADD THIS LINE
+import styles from './ScreensPage.module.css';
+import { toast } from 'react-toastify';
 
 const API_BASE_URL = "http://localhost:3000/api";
 const SCREENS_CACHE_KEY = "pixelFlowScreensCacheWithStatus";
@@ -90,11 +92,16 @@ const ScreensPage = () => {
       await fetch(`${API_BASE_URL}/players/${screenToDelete.id}`, {
         method: "DELETE",
       });
+      
+      toast.success(`Screen "${screenToDelete.name}" deleted successfully.`);
+      
       setDeleteModalOpen(false);
       setScreenToDelete(null);
       fetchScreens(false);
     } catch (error) {
-      alert(`Error: ${error.message}`);
+      
+      toast.error(`Error: ${error.message}`);
+      
     }
   };
 
@@ -104,7 +111,6 @@ const ScreensPage = () => {
     if (screens.length === 0)
       return <p className="empty-message" style={{padding: '24px'}}>No paired screens found.</p>;
 
-    // ✅ APPLY THE GRID STYLE HERE
     return (
         <div className={styles.screenGrid}> 
             {screens.map((player) => (
@@ -122,13 +128,12 @@ const ScreensPage = () => {
   return (
     <div className="page-container">
       <MainHeader title="Screens" />
-      {/* The list-container class is no longer needed, as the grid is inside renderContent */}
       {renderContent()}
       <DeleteConfirmModal
         isOpen={isDeleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
         onConfirm={handlePerformDelete}
-        screenName={screenToDelete?.name}
+        itemName={screenToDelete?.name}
       />
       <ScreenPreviewModal
         isOpen={isPreviewModalOpen}

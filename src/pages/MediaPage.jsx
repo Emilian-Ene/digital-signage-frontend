@@ -5,9 +5,9 @@ import MainHeader from '../components/MainHeader/MainHeader';
 import OfflineContent from '../components/OfflineContent/OfflineContent';
 import MediaCard from '../components/MediaCard/MediaCard';
 import DeleteConfirmModal from '../components/DeleteConfirmModal/DeleteConfirmModal';
-import '../index.css';
 import styles from './MediaPage.module.css';
 import { FiUpload, FiFolder } from 'react-icons/fi';
+import { toast } from 'react-toastify'; // ✅ 1. Import toast
 
 const API_BASE_URL = 'http://localhost:3000/api';
 
@@ -59,9 +59,14 @@ const MediaPage = () => {
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || 'Upload failed.');
+      
+      toast.success(`"${friendlyName}" uploaded successfully!`); // ✅ 2. Add success notification
+      
       fetchMedia();
     } catch (error) {
-      alert(`Error: ${error.message}`);
+      
+      toast.error(`Error: ${error.message}`); // ✅ 3. Replace alert with toast.error
+      
     } finally {
       setIsUploading(false);
       if(fileInputRef.current) {
@@ -105,11 +110,16 @@ const MediaPage = () => {
         const result = await response.json();
         throw new Error(result.message || 'Failed to delete media.');
       }
+      
+      toast.success(`"${mediaToDelete.name}" deleted successfully.`); // ✅ 4. Add success notification
+      
       setDeleteModalOpen(false);
       setMediaToDelete(null);
-      fetchMedia(); // Refresh the list
+      fetchMedia();
     } catch (error) {
-      alert(`Error: ${error.message}`);
+      
+      toast.error(`Error: ${error.message}`); // ✅ 5. Replace alert with toast.error
+      
       setDeleteModalOpen(false);
     }
   };
@@ -161,7 +171,7 @@ const MediaPage = () => {
         isOpen={isDeleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
         onConfirm={handlePerformDelete}
-        screenName={mediaToDelete?.name}
+        itemName={mediaToDelete?.name} // Changed from screenName to itemName
       />
     </div>
   );

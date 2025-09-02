@@ -1,6 +1,4 @@
-// src/pages/PlaylistDetailsPage.jsx
-
-import React, { useState, useEffect, useCallback } from 'react'; // ✅ 1. useRef removed from this import
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import styles from './PlaylistDetailsPage.module.css';
 import {
@@ -9,27 +7,45 @@ import {
 } from 'react-icons/fi';
 import OfflineContent from '../components/OfflineContent/OfflineContent';
 import PlaylistItem from '../components/PlaylistItem/PlaylistItem';
+import DeleteConfirmModal from '../components/DeleteConfirmModal/DeleteConfirmModal';
+import { toast } from 'react-toastify'; // ✅ 1. Import toast
 
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 
 const API_BASE_URL = 'http://localhost:3000';
 
-// ✅ 2. Updated the LibraryItem component to autoplay videos
 const LibraryItem = ({ item, onAdd }) => {
+  const videoRef = useRef(null);
   const isVideo = item.mediaType === 'video';
   const fileUrl = `${API_BASE_URL}${item.fileUrl}`;
 
+  const handleMouseEnter = () => {
+    if (videoRef.current) {
+      videoRef.current.play();
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (videoRef.current) {
+      videoRef.current.pause();
+    }
+  };
+
   return (
-    <div className={styles.libraryItem}>
+    <div
+      className={styles.libraryItem}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       <div className={styles.itemThumbnail}>
         {isVideo ? (
           <video
+            ref={videoRef}
             src={fileUrl}
             className={styles.itemPreviewImage}
             muted
-            autoPlay // Add this
-            loop     // Add this
+            loop
             preload="metadata"
           />
         ) : (
@@ -53,6 +69,9 @@ const PlaylistDetailsPage = () => {
   const [activeLibraryTab, setActiveLibraryTab] = useState('Media');
   const [playlistItems, setPlaylistItems] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
+  
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
 
   const hasChanges = playlist
     ? JSON.stringify(playlist.items.filter(i => i && i.media).map(i => ({ media: i.media._id, duration: i.duration }))) !==
@@ -102,9 +121,17 @@ const PlaylistDetailsPage = () => {
     };
     setPlaylistItems(currentItems => [...currentItems, newItem]);
   };
-
-  const handleDeleteItem = (instanceIdToDelete) => {
-    setPlaylistItems(currentItems => currentItems.filter(item => item.instanceId !== instanceIdToDelete));
+  
+  const showDeleteConfirmation = (item) => {
+    setItemToDelete(item);
+    setDeleteModalOpen(true);
+  };
+  
+  const handlePerformDelete = () => {
+    if (!itemToDelete) return;
+    setPlaylistItems(currentItems => currentItems.filter(pItem => pItem.instanceId !== itemToDelete.instanceId));
+    setDeleteModalOpen(false);
+    setItemToDelete(null);
   };
 
   const handleDurationChange = (instanceIdToChange, newDuration) => {
@@ -133,10 +160,14 @@ const PlaylistDetailsPage = () => {
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || 'Failed to save playlist.');
-      alert('Playlist saved successfully!');
+      
+      toast.success('Playlist saved successfully!'); // ✅ 2. Replace alert with toast.success
+      
       fetchData();
     } catch(error) {
-      alert(`Error: ${error.message}`);
+
+      toast.error(`Error: ${error.message}`); // ✅ 3. Replace alert with toast.error
+      
     } finally {
       setIsSaving(false);
     }
@@ -188,7 +219,7 @@ const PlaylistDetailsPage = () => {
       <div className={styles.mainCanvas}>
         <div className={styles.canvasHeader}>
           <div className={styles.titleGroup}>
-            {/* <Link to="/playlists" className={styles.backButton}><FiArrowLeft /></Link> */}
+            <Link to="/playlists" className={styles.backButton}><FiArrowLeft /></Link>
             <h2 className={styles.playlistTitle}>{playlist.name}</h2>
             <button className={styles.titleEditBtn}><FiEdit /></button>
           </div>
@@ -253,7 +284,7 @@ const PlaylistDetailsPage = () => {
                       key={item.instanceId}
                       id={item.instanceId}
                       item={item}
-                      onDelete={() => handleDeleteItem(item.instanceId)}
+                      onDeleteClick={() => showDeleteConfirmation(item)}
                       onDurationChange={(newDuration) => handleDurationChange(item.instanceId, newDuration)}
                     />
                   ))}
@@ -288,6 +319,13 @@ const PlaylistDetailsPage = () => {
           {renderLibraryContent()}
         </div>
       </aside>
+      
+      <DeleteConfirmModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        onConfirm={handlePerformDelete}
+        itemName={itemToDelete?.media?.friendlyName || 'this item'}
+      />
     </div>
   );
 };

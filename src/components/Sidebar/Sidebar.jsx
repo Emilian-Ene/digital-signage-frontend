@@ -1,76 +1,48 @@
-// src/components/Sidebar/Sidebar.jsx
-
 import React from 'react';
 import styles from './Sidebar.module.css';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { 
-  FiTv, FiList, FiImage, FiPenTool, FiGrid, FiCode,
-  FiBriefcase, FiDollarSign, FiHelpCircle 
+  FiGrid, FiList, FiFilm, FiBox, FiLayers, FiGitMerge, 
+  FiBriefcase, FiCreditCard, FiHelpCircle, FiX 
 } from 'react-icons/fi';
 
-const mainNavLinks = [
-  { icon: <FiTv />, text: 'Screens', path: '/screens' },
-  { icon: <FiList />, text: 'Playlists', path: '/playlists' },
-  { icon: <FiImage />, text: 'Media', path: '/media' },
-  { icon: <FiPenTool />, text: 'Scenes', path: '/scenes' },
-  { icon: <FiGrid />, text: 'Apps', path: '/apps' },
-  { icon: <FiCode />, text: 'Integrations', path: '/integrations' },
-];
+const Sidebar = ({ isOpen, toggleSidebar }) => {
+  const sidebarClass = isOpen ? styles.sidebar : `${styles.sidebar} ${styles.closed}`;
 
-const secondaryNavLinks = [
-  { icon: <FiBriefcase />, text: 'My Organization', path: '/organization' },
-  { icon: <FiDollarSign />, text: 'Billing', path: '/billing' },
-  { icon: <FiHelpCircle />, text: 'Documentation', path: '/docs' },
-];
-
-// --- THE FIX IS HERE: Add setActivePage as a prop ---
-const Sidebar = ({ activePage, setActivePage }) => {
   return (
-    <aside className={styles.sidebar}>
-      <div className={styles.sidebarHeader}>
-        {/* --- ADD onClick HERE --- */}
-        <Link to="/" className={styles.logoLink} onClick={() => setActivePage('Home')}>
-          <h1 className={styles.logo}>PixelFlow</h1>
-        </Link>
-      </div>
-      <nav className={styles.sidebarNav}>
-        <div>
-          {mainNavLinks.map(link => (
-            <Link
-              key={link.text}
-              to={link.path}
-              className={`${styles.navLink} ${activePage === link.text ? styles.active : ''}`}
-              // --- ADD onClick HERE ---
-              onClick={() => setActivePage(link.text)}
-            >
-              {link.icon}
-              <span>{link.text}</span>
-            </Link>
-          ))}
+    <nav className={sidebarClass}>
+      <div>
+        <div className={styles.sidebarHeader}>
+          <NavLink to="/" className={styles.logoLink} end>
+            <div className={styles.logo}>PixelFlow</div>
+          </NavLink>
+          <button onClick={toggleSidebar} className={styles.closeButton}>
+            <FiX />
+          </button>
         </div>
-      </nav>
+        <div className={styles.menu}>
+          <NavLink to="/screens" className={styles.menuItem} end><FiGrid /> Screens</NavLink>
+          <NavLink to="/playlists" className={styles.menuItem} end><FiList /> Playlists</NavLink>
+          <NavLink to="/media" className={styles.menuItem} end><FiFilm /> Media</NavLink>
+          <NavLink to="/scenes" className={styles.menuItem} end><FiBox /> Scenes</NavLink>
+          <NavLink to="/apps" className={styles.menuItem} end><FiLayers /> Apps</NavLink>
+          {/* ✅ CORRECTED: Changed 'menuitem' to 'menuItem' */}
+          <NavLink to="/integrations" className={styles.menuItem} end><FiGitMerge /> Integrations</NavLink>
+        </div>
+      </div>
 
       <div className={styles.sidebarFooter}>
-        <nav>
-          {secondaryNavLinks.map(link => (
-             <Link
-              key={link.text}
-              to={link.path}
-              className={`${styles.navLink} ${activePage === link.text ? styles.active : ''}`}
-              // --- ADD onClick HERE ---
-              onClick={() => setActivePage(link.text)}
-            >
-              {link.icon}
-              <span>{link.text}</span>
-            </Link>
-          ))}
-        </nav>
+        <div className={styles.menu}>
+          <NavLink to="/organization" className={styles.menuItem} end><FiBriefcase /> My Organization</NavLink>
+          <NavLink to="/billing" className={styles.menuItem} end><FiCreditCard /> Billing</NavLink>
+          <NavLink to="/documentation" className={styles.menuItem} end><FiHelpCircle /> Documentation</NavLink>
+        </div>
         <div className={styles.userProfile}>
           <div className={styles.userAvatar}>IE</div>
           <span className={styles.userEmail}>ionut.emilian@paragon-cc.co.uk</span>
         </div>
       </div>
-    </aside>
+    </nav>
   );
 };
 

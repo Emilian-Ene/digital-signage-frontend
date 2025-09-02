@@ -7,6 +7,7 @@ import CreatePlaylistModal from '../components/CreatePlaylistModal/CreatePlaylis
 import DeleteConfirmModal from '../components/DeleteConfirmModal/DeleteConfirmModal';
 import OfflineContent from '../components/OfflineContent/OfflineContent';
 import styles from './PlaylistsPage.module.css';
+import { toast } from 'react-toastify';
 
 const API_BASE_URL = 'http://localhost:3000/api';
 
@@ -19,7 +20,6 @@ const PlaylistsPage = () => {
   const [playlistToDelete, setPlaylistToDelete] = useState(null);
 
   const fetchPlaylists = useCallback(async () => {
-    // This function remains the same
     setIsLoading(true);
     setError(null);
     try {
@@ -39,6 +39,12 @@ const PlaylistsPage = () => {
     fetchPlaylists();
   }, [fetchPlaylists]);
 
+  // ✅ 1. Create a new handler function for when a playlist is created
+  const handlePlaylistCreated = () => {
+    toast.success('Playlist created successfully!');
+    fetchPlaylists(); // Then, refresh the list of playlists
+  };
+
   const headerActions = (
     <div className="playlist-header-actions">
       <button onClick={() => setCreateModalOpen(true)} className="btn-create">+ Create</button>
@@ -52,14 +58,29 @@ const PlaylistsPage = () => {
   };
 
   const handlePerformDelete = async () => {
-    // This function remains the same
+    if (!playlistToDelete) return;
+    try {
+      const response = await fetch(`${API_BASE_URL}/playlists/${playlistToDelete.id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to delete the playlist.');
+      }
+      toast.success(`Playlist "${playlistToDelete.name}" deleted successfully.`);
+      setDeleteModalOpen(false);
+      setPlaylistToDelete(null);
+      fetchPlaylists(); // Refresh the list
+    } catch (error) {
+      toast.error(`Error: ${error.message}`);
+      setDeleteModalOpen(false);
+    }
   };
 
   return (
     <div className="page-container">
       <MainHeader title="Playlists" actions={headerActions} />
       
-      {/* ✅ This section is updated to handle centering */}
       <div className={styles.contentArea}>
         {isLoading ? (
           <p className="loading-message">Loading playlists...</p>
@@ -71,7 +92,7 @@ const PlaylistsPage = () => {
               <PlaylistCard 
                 key={playlist._id} 
                 playlist={playlist} 
-                onDeleteClick={showDeleteConfirmation} 
+                onDeleteClick={() => showDeleteConfirmation(playlist._id, playlist.name)} 
               />
             ))}
           </div>
@@ -83,13 +104,14 @@ const PlaylistsPage = () => {
       <CreatePlaylistModal
         isOpen={isCreateModalOpen}
         onClose={() => setCreateModalOpen(false)}
-        onPlaylistCreated={fetchPlaylists}
+        // ✅ 2. Point the prop to your new handler function
+        onPlaylistCreated={handlePlaylistCreated}
       />
       <DeleteConfirmModal 
         isOpen={isDeleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
         onConfirm={handlePerformDelete}
-        screenName={playlistToDelete?.name}
+        itemName={playlistToDelete?.name}
       />
     </div>
   );

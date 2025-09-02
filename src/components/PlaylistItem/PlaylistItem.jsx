@@ -1,13 +1,12 @@
 import React from "react";
 import styles from "./PlaylistItem.module.css";
-// ✅ CHANGED: Replaced 'FiGripVertical' with 'FiMenu'
 import { FiMenu, FiEye, FiEdit2, FiTrash2 } from "react-icons/fi";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
 const API_BASE_URL = "http://localhost:3000";
 
-const PlaylistItem = ({ id, item, onDelete, onDurationChange }) => {
+const PlaylistItem = ({ id, item, onDeleteClick, onDurationChange }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
 
@@ -16,9 +15,8 @@ const PlaylistItem = ({ id, item, onDelete, onDurationChange }) => {
     transition,
   };
 
-  // This check is robust against items with null media
   const media = item?.media;
-  if (!media) return null; // Don't render if media is missing
+  if (!media) return null;
 
   const isVideo = media.mediaType === "video";
   const thumbnailUrl = `${API_BASE_URL}${media.fileUrl}`;
@@ -26,7 +24,6 @@ const PlaylistItem = ({ id, item, onDelete, onDurationChange }) => {
   return (
     <div ref={setNodeRef} style={style} className={styles.playlistItem}>
       <button {...listeners} {...attributes} className={styles.dragHandle}>
-        {/* ✅ CHANGED: Replaced the icon component here as well */}
         <FiMenu />
       </button>
 
@@ -36,8 +33,8 @@ const PlaylistItem = ({ id, item, onDelete, onDurationChange }) => {
             src={thumbnailUrl}
             className={styles.previewMedia}
             muted
-            autoPlay // Add this
-            loop // Add this
+            autoPlay
+            loop
             preload="metadata"
           />
         ) : (
@@ -71,7 +68,7 @@ const PlaylistItem = ({ id, item, onDelete, onDurationChange }) => {
         <button className={styles.iconBtn} title="Edit">
           <FiEdit2 />
         </button>
-        <button className={styles.iconBtn} title="Delete" onClick={onDelete}>
+        <button className={styles.iconBtn} title="Delete" onClick={onDeleteClick}>
           <FiTrash2 />
         </button>
       </div>
