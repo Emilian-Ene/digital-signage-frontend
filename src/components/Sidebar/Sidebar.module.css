@@ -17,7 +17,7 @@
 }
 
 .logo {
-  font-size: 22px;
+  font-size: 26px;
   font-weight: bold;
   color: #fff;
   
@@ -33,7 +33,7 @@
   color: #a0aec0; /* Light gray text */
   text-decoration: none;
   padding: 12px 25px;
-  font-size: 16px;
+  font-size: 20px;
   display: flex;
   align-items: center;
   gap: 15px;
@@ -52,6 +52,17 @@
   color: #007bff; /* Primary blue */
   font-weight: 500;
   border-left-color: #007bff;
+}
+
+/* Bigger, high-resolution friendly icon wrapper */
+.navIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  font-size: 24px; /* Controls icon SVG size */
+  margin-right: 12px;
 }
 
 .sidebarFooter {
@@ -80,7 +91,7 @@
 }
 
 .userEmail {
-  font-size: 14px;
+  font-size: 16px;
   color: #a0aec0;
   white-space: nowrap;
   overflow: hidden;

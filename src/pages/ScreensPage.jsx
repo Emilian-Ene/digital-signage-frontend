@@ -6,7 +6,9 @@ import PlayerCard from "../components/PlayerCard/PlayerCard";
 import DeleteConfirmModal from "../components/DeleteConfirmModal/DeleteConfirmModal";
 import OfflineContent from "../components/OfflineContent/OfflineContent";
 import ScreenPreviewModal from "../components/ScreenPreviewModal/ScreenPreviewModal";
-import styles from './ScreensPage.module.css'; // ✅ ADD THIS LINE
+import LoadingSpinner from "../components/LoadingSpiner/LoadingSpinner";
+import { toast } from "react-toastify"; // Use global ToastContainer from App.jsx
+import styles from './ScreensPage.module.css';
 
 const API_BASE_URL = "http://localhost:3000/api";
 const SCREENS_CACHE_KEY = "pixelFlowScreensCacheWithStatus";
@@ -64,7 +66,11 @@ const ScreensPage = () => {
     } catch (e) {
       setError(e.message);
     } finally {
-      if (!isSilent) setIsLoading(false);
+      if (!isSilent) {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 2000);
+      }
     }
   }, []);
 
@@ -73,6 +79,12 @@ const ScreensPage = () => {
     const intervalId = setInterval(() => fetchScreens(true), 5000);
     return () => clearInterval(intervalId);
   }, [fetchScreens]);
+
+  const handleRetry = () => {
+    setError(null);
+    setIsLoading(true);
+    fetchScreens(false);
+  };
 
   const handlePreviewClick = (screen) => {
     setScreenToPreview(screen);
@@ -93,36 +105,35 @@ const ScreensPage = () => {
       setDeleteModalOpen(false);
       setScreenToDelete(null);
       fetchScreens(false);
+      toast.success(`Screen "${screenToDelete.name}" deleted successfully!`); // Show success toast
     } catch (error) {
-      alert(`Error: ${error.message}`);
+      toast.error(`Error: ${error.message}`); // Show error toast
     }
   };
 
   const renderContent = () => {
-    if (isLoading) return <p className="loading-message" style={{padding: '24px'}}>Loading screens...</p>;
-    if (error) return <OfflineContent onRetry={() => fetchScreens(false)} />;
+    if (isLoading) return <LoadingSpinner />;
+    if (error) return <OfflineContent onRetry={handleRetry} />;
     if (screens.length === 0)
-      return <p className="empty-message" style={{padding: '24px'}}>No paired screens found.</p>;
+      return <p className="empty-message" style={{ padding: "24px" }}>No paired screens found.</p>;
 
-    // ✅ APPLY THE GRID STYLE HERE
     return (
-        <div className={styles.screenGrid}> 
-            {screens.map((player) => (
-                <PlayerCard
-                    key={player._id}
-                    player={player}
-                    onDeleteClick={() => showDeleteConfirmation(player._id, player.name)}
-                    onPreviewClick={() => handlePreviewClick(player)}
-                />
-            ))}
-        </div>
+      <div className={styles.screenGrid}>
+        {screens.map((player) => (
+          <PlayerCard
+            key={player._id}
+            player={player}
+            onDeleteClick={() => showDeleteConfirmation(player._id, player.name)}
+            onPreviewClick={() => handlePreviewClick(player)}
+          />
+        ))}
+      </div>
     );
   };
 
   return (
     <div className="page-container">
       <MainHeader title="Screens" />
-      {/* The list-container class is no longer needed, as the grid is inside renderContent */}
       {renderContent()}
       <DeleteConfirmModal
         isOpen={isDeleteModalOpen}
@@ -135,6 +146,7 @@ const ScreensPage = () => {
         onClose={() => setPreviewModalOpen(false)}
         screen={screenToPreview}
       />
+  {/* ToastContainer is provided globally in App.jsx */}
     </div>
   );
 };

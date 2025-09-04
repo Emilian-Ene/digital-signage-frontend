@@ -8,6 +8,8 @@
   display: flex;
   flex-direction: column;
   border-left: 4px solid transparent;
+  width: var(--app-card-width);
+  height: var(--app-card-height);
   /* ✅ CHANGED: Added 'transform' to the transition */
   transition: border-color 0.3s, box-shadow 0.2s, transform 0.2s ease-in-out;
 }
@@ -47,11 +49,12 @@
 }
 
 .cardBody {
-  padding: 15px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 8px;
   flex-grow: 1;
+  overflow: auto; /* allow body to scroll if content exceeds fixed height */
 }
 
 .playerDetails {
@@ -94,6 +97,45 @@
 .card.online .statusTag { color: #28a745; }
 .card.offline .playerStatusDot { background-color: #dc3545; }
 .card.offline .statusTag { color: #dc3545; }
+
+/* Pulsing/glow animations for status dots */
+.card .playerStatusDot {
+  position: relative;
+}
+
+.card.online .playerStatusDot {
+  background-color: #28a745;
+  animation: pulse-green 1.8s infinite ease-out;
+}
+
+.card.offline .playerStatusDot {
+  background-color: #dc3545;
+  animation: pulse-red 1.8s infinite ease-out;
+}
+
+@keyframes pulse-green {
+  0% {
+    box-shadow: 0 0 0 0 rgba(40,167,69,0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(40,167,69,0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(40,167,69,0);
+  }
+}
+
+@keyframes pulse-red {
+  0% {
+    box-shadow: 0 0 0 0 rgba(220,53,69,0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(220,53,69,0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(220,53,69,0);
+  }
+}
 
 .nowPlaying {
   font-size: 0.8rem;

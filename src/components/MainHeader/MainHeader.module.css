@@ -4,18 +4,24 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-shrink: 0; /* Prevent the header from shrinking */
+  padding: 20px 30px; /* Add padding for a cleaner layout */
+  background-color: #f8f9fa; /* Light background for contrast */
+  border-bottom: 1px solid #e2e8f0; /* Subtle border for separation */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+  border-radius: 8px; /* Rounded corners for a modern look */
 }
 
 .pageTitle {
-  font-size: 28px;
-  font-weight: 700;
-  color: #2d3748;
+  font-size: 24px; /* Slightly smaller font for better balance */
+  font-weight: 600; /* Medium weight for a clean look */
+  color: #2d3748; /* Dark gray for better readability */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  margin: 0; /* Remove default margin */
 }
 
 .headerActions {
   display: flex;
-  gap: 15px;
+  gap: 10px; /* Reduced gap for tighter alignment */
 }
 
 /* 
@@ -24,30 +30,33 @@
   needs to know what those classNames mean.
 */
 :global(.btn) {
-  padding: 10px 20px;
+  padding: 10px 16px; /* Adjusted padding for better proportions */
   font-size: 14px;
   font-weight: 500;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
 }
 
 :global(.btn-primary) {
-  background-color: #28a745; /* Primary green */
+  background-color: #4caf50; /* Modern green */
   color: white;
 }
 :global(.btn-primary:hover) {
-  background-color: #218838;
+  background-color: #43a047; /* Slightly darker green on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Enhance shadow on hover */
 }
 
 :global(.btn-light) {
-  background-color: #fff;
-  color: #2d3748; /* Dark text */
-  border: 1px solid #e2e8f0; /* Border color */
+  background-color: #ffffff;
+  color: #2d3748; /* Dark text for contrast */
+  border: 1px solid #e2e8f0; /* Subtle border */
 }
 :global(.btn-light:hover) {
-  background-color: #f8f9fa;
+  background-color: #f1f3f5; /* Light gray on hover */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow on hover */
 }
 
 .spacer {

@@ -5,12 +5,16 @@
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   cursor: pointer;
-  transition: transform 0.2s ease-in-out;
+  transition: border-color 0.3s, box-shadow 0.2s, transform 0.2s ease-in-out;
+  width: var(--app-card-width);
+  height: var(--app-card-height);
 }
 
 .card:hover {
   transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
 }
 
 .thumbnail {
@@ -36,17 +40,19 @@
 }
 
 .cardBody {
-  padding: 15px;
+  margin-bottom: 10px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 20px;
+  overflow: auto;
 }
 
 .cardHeader {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 10px;
+  gap: 20px;
 }
 
 .name {
@@ -66,6 +72,7 @@
 }
 
 .cardFooter {
+  border-top: 1px solid #e2e8f0;
   display: flex;
   justify-content: space-between;
   align-items: center;

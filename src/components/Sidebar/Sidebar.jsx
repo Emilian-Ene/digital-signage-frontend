@@ -3,24 +3,25 @@
 import React from 'react';
 import styles from './Sidebar.module.css';
 import { Link } from 'react-router-dom';
-import { 
-  FiTv, FiList, FiImage, FiPenTool, FiGrid, FiCode,
-  FiBriefcase, FiDollarSign, FiHelpCircle 
-} from 'react-icons/fi';
+import {
+  HiOutlineDesktopComputer, HiOutlineViewList, HiOutlinePhotograph,
+  HiOutlineSparkles, HiOutlineViewGrid, HiOutlinePuzzle,
+  HiOutlineOfficeBuilding, HiOutlineCurrencyDollar, HiOutlineQuestionMarkCircle
+} from 'react-icons/hi';
 
 const mainNavLinks = [
-  { icon: <FiTv />, text: 'Screens', path: '/screens' },
-  { icon: <FiList />, text: 'Playlists', path: '/playlists' },
-  { icon: <FiImage />, text: 'Media', path: '/media' },
-  { icon: <FiPenTool />, text: 'Scenes', path: '/scenes' },
-  { icon: <FiGrid />, text: 'Apps', path: '/apps' },
-  { icon: <FiCode />, text: 'Integrations', path: '/integrations' },
+  { icon: <HiOutlineDesktopComputer size={24} />, text: 'Screens', path: '/screens' },
+  { icon: <HiOutlineViewList size={24} />, text: 'Playlists', path: '/playlists' },
+  { icon: <HiOutlinePhotograph size={24} />, text: 'Media', path: '/media' },
+  { icon: <HiOutlineSparkles size={24} />, text: 'Scenes', path: '/scenes' },
+  { icon: <HiOutlineViewGrid size={24} />, text: 'Apps', path: '/apps' },
+  { icon: <HiOutlinePuzzle size={24} />, text: 'Integrations', path: '/integrations' },
 ];
 
 const secondaryNavLinks = [
-  { icon: <FiBriefcase />, text: 'My Organization', path: '/organization' },
-  { icon: <FiDollarSign />, text: 'Billing', path: '/billing' },
-  { icon: <FiHelpCircle />, text: 'Documentation', path: '/docs' },
+  { icon: <HiOutlineOfficeBuilding size={24} />, text: 'My Organization', path: '/organization' },
+  { icon: <HiOutlineCurrencyDollar size={24} />, text: 'Billing', path: '/billing' },
+  { icon: <HiOutlineQuestionMarkCircle size={24} />, text: 'Documentation', path: '/docs' },
 ];
 
 // --- THE FIX IS HERE: Add setActivePage as a prop ---
@@ -43,7 +44,7 @@ const Sidebar = ({ activePage, setActivePage }) => {
               // --- ADD onClick HERE ---
               onClick={() => setActivePage(link.text)}
             >
-              {link.icon}
+              <span className={styles.navIcon}>{link.icon}</span>
               <span>{link.text}</span>
             </Link>
           ))}

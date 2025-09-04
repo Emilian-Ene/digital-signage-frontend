@@ -5,15 +5,16 @@ import MainHeader from '../components/MainHeader/MainHeader';
 import OfflineContent from '../components/OfflineContent/OfflineContent';
 import MediaCard from '../components/MediaCard/MediaCard';
 import DeleteConfirmModal from '../components/DeleteConfirmModal/DeleteConfirmModal';
-import '../index.css';
 import styles from './MediaPage.module.css';
 import { FiUpload, FiFolder } from 'react-icons/fi';
+import { toast } from 'react-toastify'; // Use the shared ToastContainer in App.jsx
+import LoadingSpinner from '../components/LoadingSpiner/LoadingSpinner';
 
 const API_BASE_URL = 'http://localhost:3000/api';
 
 const MediaPage = () => {
   const [media, setMedia] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Set initial state to true
   const [error, setError] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef(null);
@@ -24,11 +25,18 @@ const MediaPage = () => {
   const fetchMedia = useCallback(async () => {
     setIsLoading(true);
     setError(null);
-    try {
+
+    const dataPromise = (async () => {
       const response = await fetch(`${API_BASE_URL}/media`);
       if (!response.ok) throw new Error('Could not connect to the server.');
       const data = await response.json();
       setMedia(data);
+    })();
+
+    const timerPromise = new Promise(resolve => setTimeout(resolve, 2000));
+
+    try {
+      await Promise.all([dataPromise, timerPromise]);
     } catch (e) {
       console.error(e);
       setError(e.message);
@@ -59,9 +67,12 @@ const MediaPage = () => {
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || 'Upload failed.');
+      
+      toast.success(`"${friendlyName}" uploaded successfully!`); // Toast for successful upload
+      
       fetchMedia();
     } catch (error) {
-      alert(`Error: ${error.message}`);
+      toast.error(`Error: ${error.message}`); // Toast for upload error
     } finally {
       setIsUploading(false);
       if(fileInputRef.current) {
@@ -70,25 +81,9 @@ const MediaPage = () => {
     }
   };
 
-  const headerActions = (
-    <div className={styles.headerActions}>
-      <input 
-        type="file" 
-        ref={fileInputRef} 
-        onChange={handleFileSelectedAndUpload} 
-        style={{ display: 'none' }} 
-        accept="image/*,video/*"
-      />
-      <button 
-        onClick={() => fileInputRef.current.click()} 
-        className={styles.btnPrimary}
-        disabled={isUploading}
-      >
-        {isUploading ? 'Uploading...' : <><FiUpload /> Upload media</>}
-      </button>
-      <button className={styles.btnLight} disabled={isUploading}>Create Folder</button>
-    </div>
-  );
+  const handleCreateFolder = () => {
+    toast.info('Create Folder functionality is not implemented yet.'); // Toast for Create Folder
+  };
 
   const showDeleteConfirmation = (id, name) => {
     setMediaToDelete({ id, name });
@@ -105,18 +100,21 @@ const MediaPage = () => {
         const result = await response.json();
         throw new Error(result.message || 'Failed to delete media.');
       }
+      
+      toast.success(`"${mediaToDelete.name}" deleted successfully.`); // Toast for successful delete
+      
       setDeleteModalOpen(false);
       setMediaToDelete(null);
-      fetchMedia(); // Refresh the list
+      fetchMedia();
     } catch (error) {
-      alert(`Error: ${error.message}`);
+      toast.error(`Error: ${error.message}`); // Toast for delete error
       setDeleteModalOpen(false);
     }
   };
 
   const renderContent = () => {
+    if (isLoading) return <LoadingSpinner />;
     if (error) return <OfflineContent onRetry={fetchMedia} />;
-    if (isLoading) return <p className="loading-message">Loading media...</p>;
     
     if (media.length === 0) {
       return (
@@ -141,6 +139,32 @@ const MediaPage = () => {
     );
   };
 
+  const headerActions = (
+    <div className={styles.headerActions}>
+      <input 
+        type="file" 
+        ref={fileInputRef} 
+        onChange={handleFileSelectedAndUpload} 
+        style={{ display: 'none' }} 
+        accept="image/*,video/*"
+      />
+      <button 
+        onClick={() => fileInputRef.current.click()} 
+        className={styles.btnPrimary}
+        disabled={isUploading}
+      >
+        {isUploading ? 'Uploading...' : <><FiUpload /> Upload media</>}
+      </button>
+      <button 
+        onClick={handleCreateFolder} 
+        className={styles.btnPrimary} 
+        disabled={isUploading}
+      >
+        <FiFolder /> Create Folder
+      </button>
+    </div>
+  );
+
   return (
     <div className="page-container">
       <MainHeader title="Media" actions={headerActions} />
@@ -161,7 +185,7 @@ const MediaPage = () => {
         isOpen={isDeleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
         onConfirm={handlePerformDelete}
-        screenName={mediaToDelete?.name}
+        itemName={mediaToDelete?.name}
       />
     </div>
   );

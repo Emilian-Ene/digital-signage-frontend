@@ -7,6 +7,9 @@
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
+ 
+  width: var(--app-card-width);
+  height: var(--app-card-height);
   /* ✅ ADDED: Add transition for a smooth hover effect */
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
@@ -37,7 +40,8 @@
 }
 
 .cardBody {
-  padding: 15px;
+  padding: 10px;
+  overflow: auto;
 }
 
 .fileName {
@@ -50,7 +54,12 @@
   text-overflow: ellipsis;
 }
 
+.fileName:first-child {
+    margin-top: 10px;
+}
+
 .cardActions {
+  border-top: 1px solid #e2e8f0;
   display: flex;
   justify-content: space-between;
   align-items: center;

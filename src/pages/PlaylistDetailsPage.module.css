@@ -13,13 +13,23 @@
   flex-direction: column;
   background-color: #f8f9fa;
 }
+/* src/pages/PlaylistDetailsPage.module.css */
+
 .canvasHeader {
   display: flex;
+  /* Keep items at opposite ends like the Screen header */
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
   flex-shrink: 0;
+  /* Visual styling to match the Screen/MainHeader appearance */
+  padding: 18px 22px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
+
 .titleGroup {
   display: flex;
   align-items: center;
@@ -31,17 +41,31 @@
   display: flex; align-items: center;
 }
 .playlistTitle { 
-  font-size: 1.5rem; font-weight: 600; 
-  color: #111827; line-height: 1; 
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2d3748;
+  line-height: 1;
+  margin: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 .titleEditBtn { 
-  background: none; border: none; cursor: pointer;
-  font-size: 1.2rem; color: #9ca3af;
-  display: flex; align-items: center;
+  padding-top: 2px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.4rem;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease-in-out;
+}
+.titleEditBtn:hover {
+  color: #6b7280;
 }
 .headerActions {
   display: flex;
   gap: 10px;
+  align-items: center;
 }
 .actionButton {
   padding: 8px 16px; border: 1px solid #d1d5db;
@@ -112,16 +136,19 @@
 .toggleBtn.active { background-color: #e5e7eb; }
 .toggleBtn:first-child { border-radius: 6px 0 0 6px; border-right: none; }
 .toggleBtn:last-child { border-radius: 0 6px 6px 0; }
+/* src/pages/PlaylistDetailsPage.module.css */
+
 .playlistContent {
   flex-grow: 1;
   background-color: #fff;
   border-radius: 12px;
   border: 1px solid #e2e8f0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
+  display: flex; /* Keep this */
+  flex-direction: column; /* Keep this */
+  /* REMOVED align-items: center; */
+  /* REMOVED justify-content: center; */
+  overflow: hidden; /* ADDED this to ensure the child is contained */
+}npm run dev
 .emptyPlaylist { text-align: center; color: #718096; }
 .emptyPlaylistIcon { font-size: 4rem; opacity: 0.5; margin-bottom: 15px; }
 .emptyPlaylist h3 { font-size: 1.2rem; margin-bottom: 10px; color: #2d3748; }
@@ -133,7 +160,7 @@
   padding: 10px;
 }
 .contentLibrary {
-  width: 400px;
+  width: 600px;
   flex-shrink: 0;
   border-left: 1px solid #e2e8f0;
   display: flex;
@@ -255,8 +282,71 @@
   height: 100%;
   object-fit: cover;
 }
-
 .itemPlaceholderIcon {
   font-size: 1.5rem;
   color: #cbd5e0;
+}
+
+/* --- Added styles for editable title --- */
+.titleInput {
+  font-size: 1.20rem;
+  font-weight: 500;
+  color: #2d3748;
+  border: 1px solid #10b981;
+  border-radius: 6px;
+  padding: 4px 8px;
+  outline: none;
+}
+
+.saveNameBtn, .cancelNameBtn {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.saveNameBtn {
+  background-color: #10b981;
+  color: white;
+}
+
+.cancelNameBtn {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+
+/* --- Custom Scrollbar Styles --- */
+
+/* This targets the containers for the playlist and the media library */
+.playlistItemList,
+.libraryContent {
+  /* For Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #10b981 #e2e8f0;
+}
+
+/* For Chrome, Safari, Edge, and other WebKit browsers */
+.playlistItemList::-webkit-scrollbar,
+.libraryContent::-webkit-scrollbar {
+  width: 8px; /* Sets the width of the scrollbar */
+}
+
+.playlistItemList::-webkit-scrollbar-track,
+.libraryContent::-webkit-scrollbar-track {
+  background: #f1f5f9; /* Sets the color of the scrollbar's track */
+  border-radius: 10px;
+}
+
+.playlistItemList::-webkit-scrollbar-thumb,
+.libraryContent::-webkit-scrollbar-thumb {
+  background-color: #10b981; /* Sets the color of the scrollbar's handle */
+  border-radius: 10px; /* Rounds the corners of the handle */
+  border: 2px solid #f1f5f9; /* Creates a small padding effect around the handle */
+}
+
+.playlistItemList::-webkit-scrollbar-thumb:hover,
+.libraryContent::-webkit-scrollbar-thumb:hover {
+  background-color: #059669; /* Darkens the handle on hover for better feedback */
 }

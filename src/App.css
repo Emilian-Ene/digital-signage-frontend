@@ -1,7 +1,5 @@
-/* src/App.css */
-
-.app-layout {
-    display: flex; /* This creates the side-by-side layout */
-    height: 100%; /* Ensure the layout container takes full height of #root */
-    width: 100%;
+.appLayout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
 }

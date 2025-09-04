@@ -1,21 +1,23 @@
 // src/pages/PlaylistDetailsPage.jsx
 
-import React, { useState, useEffect, useCallback } from 'react'; // ✅ 1. useRef removed from this import
+import React, { useState, useEffect, useCallback } from 'react'; 
 import { useParams, Link } from 'react-router-dom';
 import styles from './PlaylistDetailsPage.module.css';
 import {
   FiArrowLeft, FiEdit, FiList, FiCalendar, FiUpload, FiSearch,
   FiGrid, FiImage, FiPenTool, FiLayers, FiChevronDown, FiMonitor, FiSmartphone
 } from 'react-icons/fi';
-import OfflineContent from '../components/OfflineContent/OfflineContent';
+import OfflineContent from '../components/OfflineContent/OfflineContent'; // Import OfflineContent
 import PlaylistItem from '../components/PlaylistItem/PlaylistItem';
+import LoadingSpinner from '../components/LoadingSpiner/LoadingSpinner';
+import { toast } from 'react-toastify'; // Use global ToastContainer from App.jsx
+import DeleteConfirmModal from '../components/DeleteConfirmModal/DeleteConfirmModal';
 
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 
 const API_BASE_URL = 'http://localhost:3000';
 
-// ✅ 2. Updated the LibraryItem component to autoplay videos
 const LibraryItem = ({ item, onAdd }) => {
   const isVideo = item.mediaType === 'video';
   const fileUrl = `${API_BASE_URL}${item.fileUrl}`;
@@ -28,8 +30,8 @@ const LibraryItem = ({ item, onAdd }) => {
             src={fileUrl}
             className={styles.itemPreviewImage}
             muted
-            autoPlay // Add this
-            loop     // Add this
+            autoPlay
+            loop
             preload="metadata"
           />
         ) : (
@@ -42,7 +44,6 @@ const LibraryItem = ({ item, onAdd }) => {
   );
 };
 
-
 const PlaylistDetailsPage = () => {
   const { id } = useParams();
   const [playlist, setPlaylist] = useState(null);
@@ -53,6 +54,10 @@ const PlaylistDetailsPage = () => {
   const [activeLibraryTab, setActiveLibraryTab] = useState('Media');
   const [playlistItems, setPlaylistItems] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
+  
+  // State for editing playlist name
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [editableName, setEditableName] = useState('');
 
   const hasChanges = playlist
     ? JSON.stringify(playlist.items.filter(i => i && i.media).map(i => ({ media: i.media._id, duration: i.duration }))) !==
@@ -60,8 +65,9 @@ const PlaylistDetailsPage = () => {
     : false;
 
   const fetchData = useCallback(async () => {
-    if (!playlist) setIsLoading(true);
     setError(null);
+    setPlaylist(null);
+    setIsLoading(true);
     try {
       const [playlistResponse, mediaResponse] = await Promise.all([
         fetch(`${API_BASE_URL}/api/playlists/${id}`),
@@ -71,7 +77,9 @@ const PlaylistDetailsPage = () => {
       if (!mediaResponse.ok) throw new Error('Could not load media library.');
       const playlistData = await playlistResponse.json();
       const mediaData = await mediaResponse.json();
+      
       setPlaylist(playlistData);
+      setEditableName(playlistData.name); // Initialize editable name
       setMediaLibrary(mediaData);
 
       const initialItems = (playlistData.items || [])
@@ -81,18 +89,20 @@ const PlaylistDetailsPage = () => {
           instanceId: `item-${Date.now()}-${index}`
         }));
       setPlaylistItems(initialItems);
-
     } catch (e) {
       console.error(e);
       setError(e.message);
+      toast.error(e.message);
     } finally {
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
     }
-  }, [id, playlist]);
+  }, [id]);
 
   useEffect(() => {
     fetchData();
-  }, [id]);
+  }, [id, fetchData]);
 
   const handleAddItem = (mediaItem) => {
     const newItem = {
@@ -104,7 +114,22 @@ const PlaylistDetailsPage = () => {
   };
 
   const handleDeleteItem = (instanceIdToDelete) => {
-    setPlaylistItems(currentItems => currentItems.filter(item => item.instanceId !== instanceIdToDelete));
+    // open confirmation modal instead of deleting immediately
+    setConfirmState({ isOpen: true, instanceId: instanceIdToDelete });
+  };
+
+  // Delete confirmation state
+  const [confirmState, setConfirmState] = useState({ isOpen: false, instanceId: null });
+
+  const confirmDelete = () => {
+    const idToDelete = confirmState.instanceId;
+    setPlaylistItems(currentItems => currentItems.filter(item => item.instanceId !== idToDelete));
+    setConfirmState({ isOpen: false, instanceId: null });
+    toast.success('Item deleted successfully!');
+  };
+
+  const cancelDelete = () => {
+    setConfirmState({ isOpen: false, instanceId: null });
   };
 
   const handleDurationChange = (instanceIdToChange, newDuration) => {
@@ -119,27 +144,67 @@ const PlaylistDetailsPage = () => {
   };
 
   const handleSavePlaylist = async () => {
-    if (!hasChanges) return;
+    if (!hasChanges) {
+      toast.info('No changes to save.'); // Toast for no changes
+      return;
+    }
     setIsSaving(true);
+
     const itemsToSave = playlistItems.map(item => ({
       media: item.media._id,
       duration: item.duration
     }));
+
     try {
       const response = await fetch(`${API_BASE_URL}/api/playlists/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ items: itemsToSave }),
       });
+
       const result = await response.json();
-      if (!response.ok) throw new Error(result.message || 'Failed to save playlist.');
-      alert('Playlist saved successfully!');
-      fetchData();
-    } catch(error) {
-      alert(`Error: ${error.message}`);
+
+      if (!response.ok) {
+        throw new Error(result.message || 'Failed to save playlist.');
+      }
+
+      toast.success('Playlist published successfully!'); // Success toast for publishing
+      fetchData(); // Refresh the playlist data
+    } catch (error) {
+      toast.error(`Error: ${error.message}`); // Error toast for publishing failure
     } finally {
       setIsSaving(false);
     }
+  };
+
+  const handleNameSave = async () => {
+    if (editableName === playlist.name || !editableName.trim()) {
+      setIsEditingName(false);
+      return;
+    }
+    
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/playlists/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: editableName }),
+      });
+
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || 'Failed to update name.');
+
+      setPlaylist(prev => ({ ...prev, name: editableName }));
+      toast.success('Playlist name updated!');
+    } catch (error) {
+      toast.error(`Error: ${error.message}`);
+      setEditableName(playlist.name);
+    } finally {
+      setIsEditingName(false);
+    }
+  };
+
+  const handleUploadMedia = () => {
+    toast.info('Upload media functionality is not implemented yet.');
   };
 
   const sensors = useSensors(
@@ -160,9 +225,14 @@ const PlaylistDetailsPage = () => {
     }
   };
 
-  if (isLoading) return <p className="loading-message" style={{padding: 40}}>Loading Playlist Editor...</p>;
   if (error) return <OfflineContent onRetry={fetchData} />;
+  if (isLoading) return <LoadingSpinner />;
   if (!playlist) return <p style={{padding: 40}}>Playlist not found.</p>;
+
+  // Derive the friendly name of the item pending deletion (if any)
+  const confirmItemName = confirmState.instanceId
+    ? (playlistItems.find(i => i.instanceId === confirmState.instanceId)?.media?.friendlyName)
+    : null;
 
   const renderLibraryContent = () => {
     switch(activeLibraryTab) {
@@ -188,9 +258,29 @@ const PlaylistDetailsPage = () => {
       <div className={styles.mainCanvas}>
         <div className={styles.canvasHeader}>
           <div className={styles.titleGroup}>
-            {/* <Link to="/playlists" className={styles.backButton}><FiArrowLeft /></Link> */}
-            <h2 className={styles.playlistTitle}>{playlist.name}</h2>
-            <button className={styles.titleEditBtn}><FiEdit /></button>
+            {isEditingName ? (
+              <>
+                <input
+                  type="text"
+                  value={editableName}
+                  onChange={(e) => setEditableName(e.target.value)}
+                  className={styles.titleInput}
+                  autoFocus
+                />
+                <button onClick={handleNameSave} className={styles.saveNameBtn}>Save</button>
+                <button onClick={() => {
+                  setIsEditingName(false);
+                  setEditableName(playlist.name);
+                }} className={styles.cancelNameBtn}>Cancel</button>
+              </>
+            ) : (
+              <>
+                <h2 className={styles.playlistTitle}>{playlist.name}</h2>
+                <button onClick={() => setIsEditingName(true)} className={styles.titleEditBtn}>
+                  <FiEdit />
+                </button>
+              </>
+            )}
           </div>
           <div className={styles.headerActions}>
             <button className={`${styles.actionButton} ${styles.previewButton}`}>Preview</button>
@@ -271,7 +361,7 @@ const PlaylistDetailsPage = () => {
       </div>
       <aside className={styles.contentLibrary}>
         <div className={styles.libraryHeader}>
-          <button className={styles.uploadButton}><FiUpload /> Upload media</button>
+          <button onClick={handleUploadMedia} className={styles.uploadButton}><FiUpload /> Upload media</button>
           <div className={styles.searchWrapper}>
             <FiSearch className={styles.searchIcon} />
             <input type="text" placeholder="Search" className={styles.searchInput} />
@@ -288,6 +378,13 @@ const PlaylistDetailsPage = () => {
           {renderLibraryContent()}
         </div>
       </aside>
+  {/* ToastContainer is provided globally in App.jsx */}
+      <DeleteConfirmModal
+        isOpen={confirmState.isOpen}
+        onClose={cancelDelete}
+        onConfirm={confirmDelete}
+        screenName={confirmItemName || 'this item'}
+      />
     </div>
   );
 };

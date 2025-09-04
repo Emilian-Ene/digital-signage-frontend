@@ -5,7 +5,10 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(107, 114, 128, 0.75);
+  /* Make the overlay transparent but add a subtle blur to keep focus */
+  background-color: transparent;
+  -webkit-backdrop-filter: blur(6px) saturate(110%);
+  backdrop-filter: blur(6px) saturate(110%);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -78,3 +78,21 @@ body {
   font-weight: bold;
   text-decoration: none;
 }
+
+/* Global card size variables (px). Change these to adjust all main cards. */
+:root {
+  --app-card-width: 320px; /* default card width */
+  --app-card-gap: aspect-ratio: 16 / 9;
+}
+
+/* Force EmptyState to a single column on mid-size screens if module CSS is overridden */
+@media (max-width: 1024px) {
+  /* Also target generated CSS Module classnames (contain 'cardGrid') */
+  #empty-state [class*="cardGrid"] {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  #empty-state [class*="card"] {
+    height: auto !important;
+  }
+}

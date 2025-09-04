@@ -9,6 +9,9 @@ import PlaylistsPage from './pages/PlaylistsPage';
 import MediaPage from './pages/MediaPage'; 
 import ScreenDetailsPage from './pages/ScreenDetailsPage';
 import PlaylistDetailsPage from './pages/PlaylistDetailsPage';
+// ✅ 1. Import the ToastContainer and its necessary CSS
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SyncActivePage = ({ setActivePage }) => {
   const location = useLocation();
@@ -28,6 +31,20 @@ function App() {
 
   return (
     <BrowserRouter>
+      {/* ✅ 2. Add the ToastContainer here. This component will render all your notifications. */}
+      <ToastContainer
+        position="top-right"
+        autoClose={4000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+  style={{ zIndex: 200000 }}
+      />
       <SyncActivePage setActivePage={setActivePage} />
       <Routes>
         <Route path="/" element={<Layout activePage={activePage} setActivePage={setActivePage} />}>

@@ -6,18 +6,16 @@ import styles from './MainHeader.module.css';
 const MainHeader = ({ title, actions }) => {
   return (
     <header className={styles.mainHeader}>
-      {/* Conditionally render the title if it exists */}
+      {/* Render the title with a subtle shadow for better visibility */}
       {title && <h2 className={styles.pageTitle}>{title}</h2>}
-      
-      {/* Conditionally render a spacer if there is no title but there are actions */}
+
+      {/* Spacer for alignment if no title but actions exist */}
       {!title && actions && <div className={styles.spacer}></div>}
-      
-      {/* Conditionally render the actions if they exist */}
+
+      {/* Render actions with improved button styles */}
       {actions && <div className={styles.headerActions}>{actions}</div>}
     </header>
   );
 };
 
-// --- THIS IS THE FIX ---
-// Add the missing default export line at the end of the file.
 export default MainHeader;

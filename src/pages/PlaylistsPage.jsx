@@ -5,7 +5,9 @@ import MainHeader from '../components/MainHeader/MainHeader';
 import PlaylistCard from '../components/PlaylistCard/PlaylistCard';
 import CreatePlaylistModal from '../components/CreatePlaylistModal/CreatePlaylistModal';
 import DeleteConfirmModal from '../components/DeleteConfirmModal/DeleteConfirmModal';
-import OfflineContent from '../components/OfflineContent/OfflineContent';
+import OfflineContent from '../components/OfflineContent/OfflineContent'; // Import OfflineContent
+import LoadingSpinner from '../components/LoadingSpiner/LoadingSpinner';
+import { toast } from 'react-toastify'; // Use global ToastContainer from App.jsx
 import styles from './PlaylistsPage.module.css';
 
 const API_BASE_URL = 'http://localhost:3000/api';
@@ -19,19 +21,24 @@ const PlaylistsPage = () => {
   const [playlistToDelete, setPlaylistToDelete] = useState(null);
 
   const fetchPlaylists = useCallback(async () => {
-    // This function remains the same
-    setIsLoading(true);
-    setError(null);
+    setError(null); // Clear any previous errors
+    setPlaylists([]); // Reset playlists to avoid showing stale data
+    setIsLoading(true); // Show the loading spinner during retry
     try {
       const response = await fetch(`${API_BASE_URL}/playlists`);
       if (!response.ok) throw new Error('Could not connect to the server.');
       const data = await response.json();
-      setPlaylists(data);
+
+      // Simulate a 2-second delay for the spinner
+      setTimeout(() => {
+        setPlaylists(data);
+        setIsLoading(false);
+      }, 2000);
     } catch (e) {
       console.error(e);
-      setError(e.message);
-    } finally {
-      setIsLoading(false);
+      setError(e.message); // Set error to trigger OfflineContent
+      toast.error(e.message); // Show error toast
+      setIsLoading(false); // Stop spinner if there's an error
     }
   }, []);
 
@@ -52,20 +59,40 @@ const PlaylistsPage = () => {
   };
 
   const handlePerformDelete = async () => {
-    // This function remains the same
+    if (!playlistToDelete) return;
+    try {
+      const response = await fetch(`${API_BASE_URL}/playlists/${playlistToDelete.id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        const result = await response.json();
+        throw new Error(result.message || 'Failed to delete playlist.');
+      }
+      setDeleteModalOpen(false);
+      setPlaylistToDelete(null);
+      fetchPlaylists(); // Refresh the list
+      toast.success(`Playlist "${playlistToDelete.name}" deleted successfully!`); // Show success toast
+    } catch (error) {
+      console.error(error);
+      toast.error(`Error: ${error.message}`); // Show error toast
+      setDeleteModalOpen(false);
+    }
   };
+
+  const handlePlaylistCreated = () => {
+    fetchPlaylists(); // Refresh the list
+    toast.success('Playlist created successfully!'); // Show success toast
+    setCreateModalOpen(false); // Close the modal
+  };
+
+  if (error) return <OfflineContent onRetry={fetchPlaylists} />; // Show OfflineContent when there's an error
+  if (isLoading) return <LoadingSpinner />; // Show spinner while loading
 
   return (
     <div className="page-container">
       <MainHeader title="Playlists" actions={headerActions} />
-      
-      {/* ✅ This section is updated to handle centering */}
       <div className={styles.contentArea}>
-        {isLoading ? (
-          <p className="loading-message">Loading playlists...</p>
-        ) : error ? (
-          <OfflineContent onRetry={fetchPlaylists} />
-        ) : playlists.length > 0 ? (
+        {playlists.length > 0 ? (
           <div className={styles.playlistGrid}>
             {playlists.map(playlist => (
               <PlaylistCard 
@@ -79,11 +106,10 @@ const PlaylistsPage = () => {
           <p className="empty-message">No playlists found. Click "+ Create" to start.</p>
         )}
       </div>
-
       <CreatePlaylistModal
         isOpen={isCreateModalOpen}
         onClose={() => setCreateModalOpen(false)}
-        onPlaylistCreated={fetchPlaylists}
+        onPlaylistCreated={handlePlaylistCreated} // Pass the handler for playlist creation
       />
       <DeleteConfirmModal 
         isOpen={isDeleteModalOpen}
@@ -91,6 +117,7 @@ const PlaylistsPage = () => {
         onConfirm={handlePerformDelete}
         screenName={playlistToDelete?.name}
       />
+  {/* ToastContainer is provided globally in App.jsx */}
     </div>
   );
 };

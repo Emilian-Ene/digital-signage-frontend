@@ -1,34 +1,41 @@
 /* src/components/OfflineContent/OfflineContent.module.css */
 
 .container {
+  /* These properties make the container a full-screen overlay */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* ✅ CHANGED: This removes the faded white background */
+  background-color: transparent; 
+  z-index: 9999; /* Ensure it's on top of everything */
+
+  /* These styles center the content within the overlay */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  flex-grow: 1; /* This makes it fill the available space in the content area */
-  padding: 40px;
-  color: #4a5568;
 }
 
 .icon {
-  font-size: 4rem; /* Large icon */
-  color: #cbd5e0; /* Light gray */
-  margin-bottom: 25px;
+  font-size: 48px;
+  color: #ff6b6b;
+  margin-bottom: 16px;
 }
 
 .title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #2d3748; /* Darker text */
-  margin-bottom: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
 }
 
 .subtitle {
-  font-size: 1rem;
-  color: #718096; /* Muted text */
-  max-width: 350px;
-  margin-bottom: 30px;
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 24px;
+  text-align: center;
 }
 
 .retryButton {

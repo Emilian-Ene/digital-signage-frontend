@@ -2,11 +2,13 @@
 
 
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import Modal from '../Modal/Modal';
 import styles from './PairingModal.module.css';
 import DeviceCard from '../DeviceCard/DeviceCard';
 import InstructionsModal from '../InstructionsModal/InstructionsModal';
 import { FaAndroid, FaWindows, FaTimes } from 'react-icons/fa';
+import { toast } from 'react-toastify'; // Use global ToastContainer from App.jsx
 
 const API_BASE_URL = 'http://localhost:3000/api';
 
@@ -15,6 +17,7 @@ const PairingModal = ({ isOpen, onRequestClose }) => {
   const [screenName, setScreenName] = useState('');
   const [pinCode, setPinCode] = useState(Array(6).fill(""));
   const inputRefs = useRef([]);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   // Reset state when modal opens/closes
   useEffect(() => {
@@ -46,11 +49,11 @@ const PairingModal = ({ isOpen, onRequestClose }) => {
   const handlePairScreen = async () => {
     const pairingCode = pinCode.join('');
     if (!screenName) {
-      alert("Please enter a name for your screen.");
+      toast.error("Please enter a name for your screen."); // Show error toast
       return;
     }
     if (pairingCode.length !== 6) {
-      alert("Please enter a valid 6-character pairing code.");
+      toast.error("Please enter a valid 6-character pairing code."); // Show error toast
       return;
     }
     try {
@@ -63,11 +66,14 @@ const PairingModal = ({ isOpen, onRequestClose }) => {
         const errorData = await response.json(); 
         throw new Error(errorData.message || 'Pairing failed.');
       }
-      alert('Screen paired successfully!');
+      toast.success('Screen paired successfully!'); // Show success toast
       onRequestClose(true);
+      setTimeout(() => {
+        navigate('/screens'); // Navigate to Screens Page after success
+      }, 1000); // Add a slight delay to allow the toast to display
     } catch (error) {
       console.error("Pairing Error:", error);
-      alert(`Error: ${error.message}`);
+      toast.error(`Error: ${error.message}`); // Show error toast
     }
   };
 
@@ -128,6 +134,8 @@ const PairingModal = ({ isOpen, onRequestClose }) => {
         onRequestClose={() => setInstructionType(null)}
         deviceType={instructionType}
       />
+
+  {/* ToastContainer is provided globally in App.jsx */}
     </>
   );
 };
