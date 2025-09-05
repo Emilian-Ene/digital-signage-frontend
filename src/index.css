@@ -1,6 +1,5 @@
 /* src/index.css */
 
-/* Basic reset */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -20,10 +19,6 @@ body {
 #root {
     height: 100%;
 }
-
-/* src/index.css */
-/* ... (keep your existing body, #root styles) ... */
-
 .page-container {
   padding: 30px 40px;
   display: flex;
@@ -95,4 +90,5 @@ body {
   #empty-state [class*="card"] {
     height: auto !important;
   }
+
 }

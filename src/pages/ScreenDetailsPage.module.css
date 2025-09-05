@@ -9,12 +9,13 @@
 
 .previewColumn {
   flex: 1; /* Takes up 1 part of the space */
-  min-width: 300px;
+  min-width: 400px; /* ionut */
+  max-width: 1024px; /* ionut */
 }
 
 .settingsColumn {
   flex: 2; /* Takes up 2 parts of the space */
-  max-width: 700px;
+  max-width: 600px; /* ionut */
 }
 
 .columnTitle {
@@ -22,6 +23,7 @@
   font-weight: 600;
   color: #4a5568;
   margin-bottom: 20px;
+  text-align: center; /* center the "General settings" heading */
 }
 
 .previewBox {
@@ -86,22 +88,50 @@
 }
 
 .saveButton {
-  background-color: #007bff;
-  color: white;
+  background-color: #10b981;
+  color: #fff;
   padding: 12px 25px;
   font-size: 1rem;
   font-weight: 500;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, border-color 0.2s;
+  border: 1px solid #10b981;
+  display: block; /* center reliably inside its container */
+  width: max-content;
+  margin: 18px auto 0; /* center horizontally and add top spacing */
 }
 
 .saveButton:hover {
-  background-color: #0056b3;
+  background-color: #059669;
+  border-color: #059669;
 }
 
 .saveButton:disabled {
-  background-color: #a0aec0;
+  background-color: #d1d5db;
+  color: #6b7280;
+  border-color: #d1d5db;
   cursor: not-allowed;
+}
+
+/* Responsive: single column layout for screens narrower than 1080px */
+@media (max-width: 1280px) {
+  .detailsLayout {
+    flex-direction: column;
+    gap: 20px;
+    align-items: stretch;
+  }
+
+  .previewColumn,
+  .settingsColumn {
+    flex: none;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+  }
+
+  .formCard {
+    padding: 20px;
+  }
 }

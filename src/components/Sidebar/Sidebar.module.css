@@ -102,3 +102,10 @@
   text-decoration: none;
   color: inherit;
 }
+
+/* Hide sidebar on narrower screens to maximize content area */
+@media (max-width: 1279px) {
+  .sidebar {
+    display: none;
+  }
+}

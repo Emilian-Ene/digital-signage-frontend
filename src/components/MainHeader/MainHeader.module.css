@@ -8,7 +8,21 @@
   background-color: #f8f9fa; /* Light background for contrast */
   border-bottom: 1px solid #e2e8f0; /* Subtle border for separation */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
-  border-radius: 8px; /* Rounded corners for a modern look */
+  border-radius: 0 0 8px 8px; /* Rounded bottom corners to blend with content */
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 1200;
+}
+
+/* When the sidebar is visible (wide screens) shift the header so it doesn't overlap it.
+   Sidebar width is 400px in the layout. Adjust if your sidebar width changes. */
+@media (min-width: 1281px) {
+  .mainHeader {
+    left: 400px; /* match .sidebar width */
+    width: calc(100% - 400px);
+  }
 }
 
 .pageTitle {

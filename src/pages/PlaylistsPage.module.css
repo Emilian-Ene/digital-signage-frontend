@@ -1,9 +1,20 @@
 .playlistGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  /* Use auto-fit so cards fill available space and don't create tiny columns
+     on very wide screens; align to start to avoid vertical stretching. */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 24px;
   padding: 24px;
+  align-items: start;
+  box-sizing: border-box;
 }
 p:first-child {
  margin-top:25px ;
+}
+
+/* Optional container helper to cap the grid on ultra-wide screens */
+.playlistGridContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }

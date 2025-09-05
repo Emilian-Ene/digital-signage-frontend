@@ -103,7 +103,44 @@
 
 .mediaGrid {
   display: grid;
-  /* This creates a responsive grid that shows as many columns as can fit */
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  /* Responsive grid using auto-fit so cards resize into available space without
+     forcing an excessive number of very small columns on huge screens. */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 25px;
+  padding: 24px;
+  align-items: start; /* avoid vertical stretching that can cause overlap */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Prevent the grid from expanding beyond the main content width on very large screens */
+.mediaGridContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Centered card wrapper for the list container (used when empty or to highlight content) */
+.list-container {
+  max-width: 980px;
+  margin: 28px auto;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 28px;
+  box-shadow: 0 6px 18px rgba(2,6,23,0.04);
+}
+
+.emptyStateIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #06b6d4 0%, #10b981 100%);
+  color: white;
+  font-size: 32px;
+  box-shadow: 0 8px 22px rgba(16,185,129,0.12);
+  margin-bottom: 18px;
 }

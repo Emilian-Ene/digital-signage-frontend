@@ -9,6 +9,8 @@ import OfflineContent from '../components/OfflineContent/OfflineContent'; // Imp
 import LoadingSpinner from '../components/LoadingSpiner/LoadingSpinner';
 import { toast } from 'react-toastify'; // Use global ToastContainer from App.jsx
 import styles from './PlaylistsPage.module.css';
+import mediaStyles from './MediaPage.module.css';
+import { FiFolder } from 'react-icons/fi';
 
 const API_BASE_URL = 'http://localhost:3000/api';
 
@@ -103,7 +105,13 @@ const PlaylistsPage = () => {
             ))}
           </div>
         ) : (
-          <p className="empty-message">No playlists found. Click "+ Create" to start.</p>
+          <div className="list-container">
+            <div className={mediaStyles.emptyState}>
+              <div className={mediaStyles.emptyStateIcon}><FiFolder /></div>
+              <h2 className={mediaStyles.emptyStateTitle}>No playlists yet</h2>
+              <p className={mediaStyles.emptyStateText}>Create your first playlist to start scheduling content. Click the <strong>+ Create</strong> button above to get started.</p>
+            </div>
+          </div>
         )}
       </div>
       <CreatePlaylistModal

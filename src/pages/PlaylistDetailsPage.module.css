@@ -1,8 +1,27 @@
+/* Card style for each playlist in the libraryContent grid */
+
+
+.libraryCard {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.06);
+  width: 100%;       /* fill the grid column */
+  /* max-width: 520px;  limit the visual width in px */
+  height: 72px;      /* fixed card height in px */
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* align inner content to the start */
+  gap: 12px;
+  margin: 0;    /* don't center the card; let it stretch */
+  box-sizing: border-box;
+}
 /* src/pages/PlaylistDetailsPage.module.css */
 
 .editorLayout {
   display: flex;
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
   background-color: #ffffff;
 }
@@ -76,6 +95,18 @@
   background-color: #10b981;
   color: #fff;
   border-color: #10b981;
+  }
+
+  .publishButton:hover:enabled {
+    background-color: #059669;
+    border-color: #059669;
+  }
+
+  .publishButton:disabled {
+    background-color: #d1d5db;
+    color: #6b7280;
+    border-color: #d1d5db;
+    cursor: not-allowed;
 }
 .playlistSettings, .layoutSettings {
   display: flex;
@@ -150,14 +181,55 @@
   overflow: hidden; /* ADDED this to ensure the child is contained */
 }npm run dev
 .emptyPlaylist { text-align: center; color: #718096; }
-.emptyPlaylistIcon { font-size: 4rem; opacity: 0.5; margin-bottom: 15px; }
+.emptyPlaylist {
+  text-align: center;
+  color: #718096;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  height: 100%; /* fill the playlist area so centering works */
+}
+.emptyPlaylistIcon {
+  font-size: 48px; /* ~3rem */
+  color: #10b981; /* folder accent color */
+  opacity: 0.95;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.emptyPlaylistCard {
+  max-width: 820px;
+  margin: auto; /* center vertically and horizontally inside the playlist area */
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 36px 28px;
+  box-shadow: 0 8px 24px rgba(2,6,23,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.emptyLead {
+  color: #475569;
+  font-size: 0.98rem;
+  max-width: 560px;
+  margin-bottom: 10px;
+}
 .emptyPlaylist h3 { font-size: 1.2rem; margin-bottom: 10px; color: #2d3748; }
 .emptyPlaylist p { font-size: 0.9rem; max-width: 300px; }
 .playlistItemList {
   width: 100%;
   height: 100%;
   overflow-y: auto;
+  min-height: 0; /* allow the flex child to shrink and enable scrolling */
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* keep the same 12px gap between items even when there are only a few */
+  justify-content: flex-start; /* stack from top to bottom */
 }
 .contentLibrary {
   width: 600px;
@@ -165,8 +237,12 @@
   border-left: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  
 }
 .libraryHeader {
+  margin-top: 18px;
   padding: 20px;
   border-bottom: 1px solid #e2e8f0;
   display: flex;
@@ -222,8 +298,15 @@
 }
 .libraryContent {
   flex-grow: 1;
+  /* show max 4 cards: 4*72px cards + 3*10px gaps + 20px padding top + 20px padding bottom = 360px */
+  max-height: 364px;
   overflow-y: auto;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* 10px gap between cards */
+  align-items: stretch;
+
 }
 .contentHeader {
   display: flex;
@@ -249,20 +332,27 @@
 .libraryItem {
   display: flex;
   align-items: center;
-  gap: 15px;
-  padding: 5px;
+  justify-content: space-between; /* place thumbnail+title at start and button at end */
+  gap: 12px;
+  padding: 0;
+  width: 100%;
 }
 .itemThumbnail {
-  width: 50px;
-  height: 30px;
+  width: 56px;
+  height: 40px;
   background-color: #e2e8f0;
   border: 1px solid #d1d5db;
-  border-radius: 4px;
+  border-radius: 6px;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 .itemName {
   flex-grow: 1;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  margin-left: 12px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -330,7 +420,7 @@
 /* For Chrome, Safari, Edge, and other WebKit browsers */
 .playlistItemList::-webkit-scrollbar,
 .libraryContent::-webkit-scrollbar {
-  width: 8px; /* Sets the width of the scrollbar */
+  width: 12px; /* slightly larger left scrollbar for easier grab */
 }
 
 .playlistItemList::-webkit-scrollbar-track,
@@ -341,12 +431,94 @@
 
 .playlistItemList::-webkit-scrollbar-thumb,
 .libraryContent::-webkit-scrollbar-thumb {
-  background-color: #10b981; /* Sets the color of the scrollbar's handle */
-  border-radius: 10px; /* Rounds the corners of the handle */
-  border: 2px solid #f1f5f9; /* Creates a small padding effect around the handle */
+  background-color: linear-gradient(180deg, #10b981, #059669);
+  background-clip: padding-box;
+  border-radius: 999px; /* pill-shaped thumb */
+  border: 3px solid #f8fafc; /* light padding so thumb looks inset */
+  box-shadow: 0 2px 6px rgba(2,6,23,0.08);
 }
 
 .playlistItemList::-webkit-scrollbar-thumb:hover,
 .libraryContent::-webkit-scrollbar-thumb:hover {
-  background-color: #059669; /* Darkens the handle on hover for better feedback */
+  filter: brightness(0.9);
+}
+
+/* Make the left playlist scrollbar look distinct and a bit more prominent */
+.playlistItemList::-webkit-scrollbar-track {
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+/* Firefox */
+.playlistItemList,
+.playlistItemList {
+  scrollbar-width: thin;
+  scrollbar-color: #10b981 #f1f5f9;
+}
+
+/* Responsive: stack layout to single column on narrower screens */
+@media (max-width: 1740px) {
+  .editorLayout {
+    flex-direction: column;
+    height: 100%;
+  }
+  .mainCanvas {
+    order: 1;
+    padding: 16px;
+  }
+  .contentLibrary {
+    order: 2;
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid #e2e8f0;
+    height: auto;
+    overflow: visible;
+  }
+  .libraryContent {
+  max-width: 100%;
+  padding: 16px;
+  /* show max 4 cards and make the card area scrollable */
+  /* 4*72 + 3*10 + 32 = 360 */
+  max-height: 364px;
+    overflow-y: auto;
+    -ms-overflow-style: auto; /* ensure scrollbar visible in IE/Edge */
+    scrollbar-width: auto; /* ensure visible in Firefox */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .libraryCard {
+    max-width: 100%;
+    width: 100%;
+  }
+  /* Apply same max-height + scrolling to the playlist items list on small screens */
+  .playlistItemList {
+  max-height: 364px; /* show max 4 items */
+    overflow-y: auto;
+    -ms-overflow-style: auto;
+    scrollbar-width: auto;
+  }
+}
+
+/* On large screens show up to 10 items in the library panel; scroll only if more than 10 */
+@media (min-width: 1741px) {
+  .libraryContent {
+    /* On large screens keep the library as an independently scrollable
+       column so users can browse the media while the left list remains
+       visible. Adjust the subtraction (240px) if your header/tooling height
+       differs. */
+    max-height: calc(100vh - 240px);
+    min-height: 0;
+    overflow-y: auto;
+    gap: 12px;
+  }
+  .playlistItemList {
+   /* Do not clamp the main/playlist list on wide screens either */
+   /* For large screens enable an internal scrollbar so the left list is
+     scrollable independently when it grows taller than the viewport. The
+     calc subtracts header/tooling height — adjust if needed. */
+   max-height: calc(100vh - 240px);
+   min-height: 0; /* allow flex child to shrink and scroll */
+   overflow-y: auto;
+  }
 }

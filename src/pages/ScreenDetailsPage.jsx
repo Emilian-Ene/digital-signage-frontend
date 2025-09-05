@@ -175,7 +175,7 @@ const ScreenDetailsPage = () => {
                   value={assignedContentId}
                   onChange={(e) => setAssignedContentId(e.target.value)}
                 >
-                  <option value="">-- No Playlist Assigned --</option>
+                  <option value="">No Playlist Assigned</option>
                   {playlists.map((p) => (
                     <option key={p._id} value={p._id}>
                       {p.name}

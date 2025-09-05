@@ -50,32 +50,38 @@ const MediaPage = () => {
   }, [fetchMedia]);
 
   const handleFileSelectedAndUpload = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
     setIsUploading(true);
-    const formData = new FormData();
-    formData.append('mediaFile', file);
-    const friendlyName = file.name.replace(/\.[^/.]+$/, "");
-    formData.append('friendlyName', friendlyName);
-    if (file.type.startsWith('image')) {
-      formData.append('duration', 10);
-    }
+
     try {
-      const response = await fetch(`${API_BASE_URL}/media/upload`, {
-        method: 'POST',
-        body: formData,
-      });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.message || 'Upload failed.');
-      
-      toast.success(`"${friendlyName}" uploaded successfully!`); // Toast for successful upload
-      
+      // Upload files sequentially to avoid stressing the server/network
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const formData = new FormData();
+        formData.append('mediaFile', file);
+        const friendlyName = file.name.replace(/\.[^/.]+$/, "");
+        formData.append('friendlyName', friendlyName);
+        if (file.type.startsWith('image')) {
+          formData.append('duration', 10);
+        }
+
+        const response = await fetch(`${API_BASE_URL}/media/upload`, {
+          method: 'POST',
+          body: formData,
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.message || 'Upload failed.');
+        toast.success(`"${friendlyName}" uploaded successfully!`);
+      }
+
+      // Refresh media list after all uploads finish
       fetchMedia();
     } catch (error) {
-      toast.error(`Error: ${error.message}`); // Toast for upload error
+      toast.error(`Error: ${error.message}`);
     } finally {
       setIsUploading(false);
-      if(fileInputRef.current) {
+      if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
     }
@@ -147,6 +153,7 @@ const MediaPage = () => {
         onChange={handleFileSelectedAndUpload} 
         style={{ display: 'none' }} 
         accept="image/*,video/*"
+        multiple
       />
       <button 
         onClick={() => fileInputRef.current.click()} 

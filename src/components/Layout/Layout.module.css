@@ -9,4 +9,6 @@
 .pageContent {
   flex-grow: 1;
   overflow-y: auto; /* Allow content to scroll if it's too long */
+  /* account for fixed header height (approx 72px) */
+  padding-top: 72px;
 }

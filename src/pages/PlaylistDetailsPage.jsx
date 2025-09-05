@@ -3,15 +3,17 @@
 import React, { useState, useEffect, useCallback } from 'react'; 
 import { useParams, Link } from 'react-router-dom';
 import styles from './PlaylistDetailsPage.module.css';
+import mediaStyles from './MediaPage.module.css';
 import {
   FiArrowLeft, FiEdit, FiList, FiCalendar, FiUpload, FiSearch,
-  FiGrid, FiImage, FiPenTool, FiLayers, FiChevronDown, FiMonitor, FiSmartphone
+  FiGrid, FiImage, FiPenTool, FiLayers, FiChevronDown, FiMonitor, FiSmartphone, FiFolder
 } from 'react-icons/fi';
 import OfflineContent from '../components/OfflineContent/OfflineContent'; // Import OfflineContent
 import PlaylistItem from '../components/PlaylistItem/PlaylistItem';
 import LoadingSpinner from '../components/LoadingSpiner/LoadingSpinner';
 import { toast } from 'react-toastify'; // Use global ToastContainer from App.jsx
 import DeleteConfirmModal from '../components/DeleteConfirmModal/DeleteConfirmModal';
+import MainHeader from '../components/MainHeader/MainHeader';
 
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
@@ -238,15 +240,16 @@ const PlaylistDetailsPage = () => {
     switch(activeLibraryTab) {
       case 'Media':
         return (
-          <div className={styles.itemList}>
+          <>
             {mediaLibrary.map(item =>
-              <LibraryItem
-                key={item._id}
-                item={item}
-                onAdd={() => handleAddItem(item)}
-              />
+              <div className={styles.libraryCard} key={item._id}>
+                <LibraryItem
+                  item={item}
+                  onAdd={() => handleAddItem(item)}
+                />
+              </div>
             )}
-          </div>
+          </>
         );
       default:
         return <p style={{textAlign: 'center', color: '#9ca3af', paddingTop: '20px'}}>Content for {activeLibraryTab} will be here.</p>;
@@ -255,6 +258,8 @@ const PlaylistDetailsPage = () => {
 
   return (
     <div className={styles.editorLayout}>
+      {/* Page-level main header */}
+      <MainHeader title={playlist.name} />
       <div className={styles.mainCanvas}>
         <div className={styles.canvasHeader}>
           <div className={styles.titleGroup}>
@@ -351,11 +356,13 @@ const PlaylistDetailsPage = () => {
               </SortableContext>
             </DndContext>
           ) : (
-            <div className={styles.emptyPlaylist}>
-              <div className={styles.emptyPlaylistIcon}>🖼️</div>
-              <h3>This playlist is empty</h3>
-              <p>Select content from the library on the right to change it.</p>
-            </div>
+              <div className="list-container">
+                <div className={mediaStyles.emptyState}>
+                  <div className={mediaStyles.emptyStateIcon}><FiFolder /></div>
+                  <h2 className={mediaStyles.emptyStateTitle}>This playlist is empty</h2>
+                  <p className={mediaStyles.emptyStateText}>Start building your playlist by adding images or videos from your media library. Select content from the library on the right to add it to this playlist.</p>
+                </div>
+              </div>
           )}
         </div>
       </div>

@@ -8,13 +8,18 @@
   padding: 40px;
   text-align: center;
   margin: auto;
+  /* match InstructionsModal text color */
+  color: #e0e0e0;
 }
 
 .title {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 36px;
+  color: #6e6e6e; /* make H2/title black as requested */
+  margin-bottom: 30px;
+  text-transform: capitalize;
+  /* remove text-shadow for crisp black text */
+  text-shadow: none;
 }
 
 /* --- THE CHANGE IS HERE --- */
@@ -34,24 +39,28 @@
 
 
 .card {
-  background-color: #ffffff;
-  border: 1px solid #e6edf3;
+  /* higher-contrast card for readability */
+  background: rgba(255,255,255,0.98); /* nearly solid white to increase contrast */
+  border: 1px solid rgba(2,6,23,0.06);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
   border-radius: 14px;
   padding: 28px 22px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
-  transition: transform 220ms ease, box-shadow 220ms ease;
+  box-shadow: 0 8px 24px rgba(2,6,23,0.08);
+  transition: transform 220ms ease, box-shadow 220ms ease, background-color 220ms ease;
   text-align: center;
+  color: #0f1724; /* dark text for maximum legibility on light card */
   /* Fixed pixel height so cards are consistent (pixel-perfect) */
   height: 320px;
 }
 
 .card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+  transform: translateY(-8px);
+  box-shadow: 0 18px 40px rgba(2,6,23,0.12);
 }
 
 .icon {
@@ -71,33 +80,51 @@
 .cardTitle {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #2d3748;
+  /* use modal accent for headings */
+  color: #00796b; /* darker teal for contrast while keeping the accent tone */
   margin-bottom: 10px;
 }
 
 .cardSubtitle {
   font-size: 0.95rem;
-  color: #6b7280;
+  color: #475569; /* dark gray for good readability */
 }
 
 .cardButton {
   margin-top: 14px;
   padding: 8px 14px;
   border-radius: 10px;
-  background-color: #3b82f6;
-  color: white;
+  background-color: #00bfa5; /* accent */
+  color: #ffffff; /* ensure button text is white on accent */
   border: none;
   cursor: pointer;
   font-weight: 600;
   transition: background-color 150ms ease, transform 150ms ease;
+  /* subtle shadow and slight transparency to sit on glass */
+  box-shadow: 0 6px 18px rgba(6,191,165,0.14);
 }
 
 .cardButton:hover {
-  background-color: #2563eb;
+  background-color: #00a88f;
   transform: translateY(-2px);
 }
 
 /* ------------------ Responsive breakpoints ------------------ */
+/* Large screens down to small desktop: stack cards for <1400px */
+@media (max-width: 1400px) {
+  .cardGrid {
+    grid-template-columns: 1fr; /* single column stack */
+    gap: 18px; /* consistent vertical spacing */
+    max-width: 1000px; /* keep cards readable */
+    padding: 0 16px;
+  }
+
+  /* keep card proportions visually consistent on this breakpoint */
+  .card {
+    height: 320px;
+  }
+}
+
 /* Tablet / small desktop */
 @media (max-width: 1024px) {
   /* At tablet widths force a single column for clearer stacking */
@@ -119,7 +146,7 @@
   }
 
   .title {
-    font-size: 1.5rem;
+  font-size: 1.5rem;
   }
 }
 

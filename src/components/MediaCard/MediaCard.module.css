@@ -8,8 +8,12 @@
   display: flex;
   flex-direction: column;
  
-  width: var(--app-card-width);
-  height: var(--app-card-height);
+  /* Let the card fill the grid cell and only cap its width so it never overflows
+    a responsive grid. Avoid a fixed height so content flows naturally. */
+  width: 100%;
+  max-width: var(--app-card-width);
+  height: auto;
+  min-height: 0;
   /* ✅ ADDED: Add transition for a smooth hover effect */
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }

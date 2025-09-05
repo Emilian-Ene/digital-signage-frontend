@@ -9,6 +9,8 @@ import ScreenPreviewModal from "../components/ScreenPreviewModal/ScreenPreviewMo
 import LoadingSpinner from "../components/LoadingSpiner/LoadingSpinner";
 import { toast } from "react-toastify"; // Use global ToastContainer from App.jsx
 import styles from './ScreensPage.module.css';
+import mediaStyles from './MediaPage.module.css';
+import { FiFolder } from 'react-icons/fi';
 
 const API_BASE_URL = "http://localhost:3000/api";
 const SCREENS_CACHE_KEY = "pixelFlowScreensCacheWithStatus";
@@ -115,7 +117,16 @@ const ScreensPage = () => {
     if (isLoading) return <LoadingSpinner />;
     if (error) return <OfflineContent onRetry={handleRetry} />;
     if (screens.length === 0)
-      return <p className="empty-message" style={{ padding: "24px" }}>No paired screens found.</p>;
+      return (
+        <div className="list-container">
+          <div className={mediaStyles.emptyState}>
+            <div className={mediaStyles.emptyStateIcon}><FiFolder /></div>
+            <h2 className={mediaStyles.emptyStateTitle}>No paired screens found</h2>
+            <p className={mediaStyles.emptyStateText}>
+              Open the PixelFlow app and enter the pairing code shown on the player to connect.</p>
+          </div>
+        </div>
+      );
 
     return (
       <div className={styles.screenGrid}>
